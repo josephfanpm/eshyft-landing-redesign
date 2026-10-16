@@ -4,18 +4,20 @@ import { DEFAULT_CITY, ROLES, SHIFTS_MAX, SHIFTS_MIN, SHIFT_LENGTHS, cities } fr
 
 export type EstimatorState = { city: City; role: Role; shifts: number; hours: ShiftLength }
 
-const DEFAULTS: EstimatorState = { city: DEFAULT_CITY, role: 'CNA', shifts: 8, hours: 8 }
+const DEFAULTS: EstimatorState = { city: DEFAULT_CITY, role: 'RN', shifts: 20, hours: 8 }
 
 function fromUrl(): EstimatorState {
   const q = new URLSearchParams(window.location.search)
   const city = cities.find((c) => c.slug === q.get('city')) ?? DEFAULTS.city
   const role = (ROLES as string[]).includes(q.get('role') ?? '') ? (q.get('role') as Role) : DEFAULTS.role
-  const shifts = Number(q.get('shifts'))
+  // A missing param must not parse as 0 (Number(null) === 0), now that 0 is a valid value.
+  const rawShifts = q.get('shifts')
+  const shifts = rawShifts === null ? NaN : Number(rawShifts)
   const hours = Number(q.get('hours')) as ShiftLength
   return {
     city,
     role,
-    shifts: shifts >= SHIFTS_MIN && shifts <= SHIFTS_MAX ? shifts : DEFAULTS.shifts,
+    shifts: Number.isInteger(shifts) && shifts >= SHIFTS_MIN && shifts <= SHIFTS_MAX ? shifts : DEFAULTS.shifts,
     hours: SHIFT_LENGTHS.includes(hours) ? hours : DEFAULTS.hours,
   }
 }

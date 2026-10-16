@@ -18,21 +18,21 @@ export function EstimateMethodDialog({
   return (
     <Dialog open={open} onClose={onClose} title="How we estimate earnings">
       <p className="text-ink-2">
-        Your estimate is based on what a typical {roleName[role].toLowerCase()} earns per hour in the{' '}
-        {city.metro}, multiplied by how much you choose to work.
+        Your estimate is based on what a {roleName[role].toLowerCase()} earns per hour in the {city.metro},
+        multiplied by how much you choose to work.
       </p>
 
       <dl className="mt-6 divide-y divide-hairline rounded-xl border border-hairline">
-        <Row label={`Median ${role} wage, ${city.metro}`} value={`${formatUsdCents(hourly)}/hr`} />
+        <Row label={`Estimated ${role} rate, ${city.metro}`} value={`${formatUsdCents(hourly)}/hr`} />
         <Row label="Hours per shift" value={`× ${hours}`} />
         <Row label="Shifts per month" value={`× ${shifts}`} />
         <Row label="Estimated monthly earnings" value={formatUsd(monthly)} strong />
       </dl>
 
       <p className="mt-6 text-sm text-ink-2">
-        Hourly wages are the metro-area median from the U.S. Bureau of Labor Statistics Occupational Employment and
-        Wage Statistics ({meta.wages.reference}). Estimates are before taxes and aren’t a guarantee of pay. On ESHYFT,
-        each facility sets its own shift rates, which can be higher or lower than the median.
+        Hourly rates are estimated from U.S. Bureau of Labor Statistics wage data for your metro area (
+        {meta.wages.reference}). Estimates are before taxes and aren’t a guarantee of pay. On ESHYFT, each facility
+        sets its own shift rates, which can be higher or lower than this estimate.
       </p>
     </Dialog>
   )

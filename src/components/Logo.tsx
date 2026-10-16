@@ -1,12 +1,6 @@
-/** ESHYFT mark (coral ring + blue cross) and wordmark. */
+import logoUrl from '../assets/eshyft-logo.png'
+
+/** ESHYFT's horizontal logo (388×80 PNG, rendered at 32px tall so it stays sharp on 2x screens). */
 export function Logo() {
-  return (
-    <span className="flex items-center gap-2">
-      <svg viewBox="0 0 32 32" className="size-8" aria-hidden>
-        <circle cx="16" cy="16" r="11" fill="none" stroke="#ef4651" strokeWidth="4" />
-        <path d="M16 9.5v13M9.5 16h13" stroke="#3399ff" strokeWidth="4" strokeLinecap="round" />
-      </svg>
-      <span className="text-[19px] font-semibold tracking-[0.22em]">ESHYFT</span>
-    </span>
-  )
+  return <img src={logoUrl} alt="ESHYFT" width={155} height={32} className="h-8 w-auto" />
 }

@@ -5,7 +5,7 @@ A concept redesign of **[eshyft.com/nurses](https://eshyft.com/nurses/)**, the p
 **Live demo:** https://josephfanpm.github.io/eshyft-landing-redesign/
 **Full write-up:** [docs/CASE_STUDY.md](docs/CASE_STUDY.md) explains why every part of the design was chosen.
 
-![Hero: "You could make $1,422 on ESHYFT", a shifts slider, a location pill and a map of 134 nursing homes around Philadelphia](docs/screenshots/hero-philadelphia.png)
+![Hero: "You could make $8,950 on ESHYFT", a shifts slider, a location pill and a map of 134 nursing homes around Philadelphia](docs/screenshots/hero-philadelphia.png)
 
 ---
 
@@ -15,9 +15,9 @@ Airbnb's host page solves ESHYFT's problem. It persuades someone to supply their
 
 | Airbnb host page | This redesign |
 |---|---|
-| "Your home could make **$2,087** on Airbnb" | "You could make **$1,422** on ESHYFT" |
-| Slider: nights per month | Slider: shifts per month (1–20) |
-| Search pill: *Toronto · Entire place · 2 bedrooms* | Search pill: *Philadelphia · CNA · 8-hour shifts* |
+| "Your home could make **$2,087** on Airbnb" | "You could make **$8,950** on ESHYFT" |
+| Slider: nights per month | Slider: shifts per month (0–30, default 20) |
+| Search pill: *Toronto · Entire place · 2 bedrooms* | Search pill: *Philadelphia · RN · 8-hour shifts* |
 | Map of nearby listings with price pins | Map of nearby nursing homes with distance pins; tap one for a per-shift estimate |
 | "Learn how we estimate earnings" | The same link, opening the maths with your own numbers and its BLS source |
 | "Join millions of hosts": 3 icon columns | "Work per diem on your terms": flexible / pays fast / supported |
@@ -36,7 +36,7 @@ Airbnb's host page solves ESHYFT's problem. It persuades someone to supply their
 | **CMS Nursing Home Provider Information (processed 2026-09-01)** | All 14,690 Medicare/Medicaid-certified nursing homes, with coordinates, bed count and CMS star rating |
 
 - **Output:** 56 metros covering all 30 states ESHYFT serves, and 2,763 nursing homes within 15 miles of a metro center.
-- **Philadelphia (the default):** CNA $22.22/hr · LPN $34.00/hr · RN $48.64/hr, with 134 nursing homes within 15 miles.
+- **Philadelphia (the default):** BLS medians of CNA $22.22/hr · LPN $34.00/hr · RN $48.64/hr, with 134 nursing homes within 15 miles. The estimator applies a 15% per diem uplift to these medians (see the case study, §6).
 - **Privacy:** facility names are dropped, so the page never implies a specific nursing home is an ESHYFT partner.
 
 ## Results

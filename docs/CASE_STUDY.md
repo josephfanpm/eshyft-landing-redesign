@@ -10,8 +10,8 @@ ESHYFT's nurse page has one job: **get CNAs, LPNs and RNs to download the app.**
 
 I rebuilt the page using the **Airbnb host page** as the model, because that page is the best-tested answer to "convince someone to supply a marketplace." The redesign leads with a personalized number:
 
-> **You could make $1,422 on ESHYFT**
-> 8 shifts a month · $22.22/hr · Philadelphia · CNA
+> **You could make $8,950 on ESHYFT**
+> 20 shifts a month · $55.94/hr · Philadelphia · RN
 
 A slider, a location/license picker and a live map of the **134 nursing homes within 15 miles of Philadelphia** let the visitor make the estimate their own. Every number comes from a reproducible dataset built from **BLS wage data** and **CMS's federal nursing home directory**, covering 56 metros in all 30 states ESHYFT serves.
 
@@ -96,8 +96,8 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 |---|---|---|---|
 | **Header** | Logo + "Get started" | Logo + "Get the app" (sticky full-width button on mobile) | One action. On a phone the button goes straight to ESHYFT's own Branch smart link; on desktop it opens a QR code. |
 | **Hero** | "Your home could make $X on Airbnb" | "You could make **$X** on ESHYFT", with the number on its own line | The number is the largest thing on the page. Explicit line breaks keep the number on its own line at every width. |
-| **Slider** | Nights per month | Shifts per month, 1–20, default 8 (two a week) | A month is the unit people budget in. 8 is a realistic side-income default; 20 covers near full time. |
-| **Location pill** | *Toronto · Entire place · 2 bedrooms* | *Philadelphia · CNA · 8-hour shifts* | Location, license and shift length are the three variables that actually change pay. One popover holds all three. |
+| **Slider** | Nights per month | Shifts per month, 0–30, default 20 | A month is the unit people budget in. 20 eight-hour shifts is roughly a full-time month, so the default shows the full earning potential; 0–30 covers everything from trying it out to picking up extra. |
+| **Location pill** | *Toronto · Entire place · 2 bedrooms* | *Philadelphia · RN · 8-hour shifts* (RN by default) | Location, license and shift length are the three variables that actually change pay. One popover holds all three. |
 | **Map** | Nearby listings with prices | Nearby nursing homes with distance pins; tap for a per-shift estimate | Answers "is there work near me?" (§7) |
 | **Support banner** | "Curious about hosting? Let's talk" | "New to per diem? Get answers from ESHYFT's support team, 24/7." | First-time per diem nurses have the most questions. This uses the page's real 24/7 support claim. |
 | **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
@@ -114,18 +114,26 @@ What I removed: facility sales CTAs, the "Company" mega-menu, and decorative sti
 ## 6. The earnings estimate
 
 ```
-monthly = shifts per month × hours per shift × median hourly wage (license, metro)
+hourly rate = BLS median hourly wage (license, metro) × 1.15
+monthly     = shifts per month × hours per shift × hourly rate
 ```
 
-**Why the BLS median, and not a higher "per diem rate"?**
+**Why the BLS median as the base?**
 - **It's defensible.** It's the U.S. government's published median for that occupation in that metro.
-- **It's conservative.** Per diem rates are often above staff medians. An estimate that under-promises builds more trust than one that over-promises, and keeps the claim legally safe (Airbnb's estimate carries the same caveat).
-- **It's explainable.** The "estimate earnings" dialog shows the maths with the visitor's own numbers: *$22.22/hr × 8 hrs × 8 shifts = $1,422*.
-- **In production I'd switch to ESHYFT's own data:** the median *posted* rate by license and metro over the last 90 days. That's proprietary, so this public repo deliberately doesn't use it.
+- **It's local.** The same license pays very differently across the 56 metros: CNAs range from $17.00 (Little Rock) to $23.69 (New York metro).
+
+**Why the 15% per diem uplift?** The BLS figure is a *staff* median. Per diem shifts usually pay above staff wages, because facilities pay a premium for flexible, short-notice coverage. Using the raw median would understate what a per diem nurse sees in the app.
+- The **15% is a product assumption**, not a published statistic.
+- I chose it to sit conservatively between the staff median and agency rates.
+- It lives in one constant (`PER_DIEM_UPLIFT` in `src/lib/estimate.ts`), so it's trivial to tune or A/B test.
+
+**How it's presented.** The "estimate earnings" dialog shows the maths with the visitor's own numbers: *$55.94/hr × 8 hrs × 20 shifts = $8,950*. It describes the hourly figure as an estimated rate *based on* BLS wage data, never as "the BLS median", and it says each facility sets its own rates, which can be higher or lower.
+
+**In production I'd switch to ESHYFT's own data:** the median *posted* rate by license and metro over the last 90 days. That replaces both the BLS base and the assumed uplift with the real number. It's proprietary, so this public repo deliberately doesn't use it.
 
 **Why Philadelphia by default?** ESHYFT is headquartered in New Jersey, Pennsylvania has three of the six testimonials on the current page, and Philadelphia is the largest metro in that region with deep nursing home density. A production version would default to the visitor's IP-derived metro.
 
-**Shareable state.** The estimate lives in the URL (`?city=pittsburgh-pa&role=RN&shifts=12&hours=12`). Recruiters and paid ads can link to a localized estimate ("RNs in Pittsburgh could make $5,702"), and nurses can share their number.
+**Shareable state.** The estimate lives in the URL (`?city=pittsburgh-pa&role=RN&shifts=12&hours=12`). Recruiters and paid ads can link to a localized estimate ("RNs in Pittsburgh could make $6,558"), and nurses can share their number.
 
 ---
 
@@ -139,7 +147,7 @@ monthly = shifts per month × hours per shift × median hourly wage (license, me
 **Why distance on the pins instead of prices?** Every pin in a metro would show the same estimated pay, which is meaningless repetition. Distance varies, and "near home" is the other half of the per diem promise. Tapping a pin opens a card with:
 - bed count
 - the CMS star rating
-- one shift's estimated pay for the selected license (*"One 12-hour RN shift ≈ $475"*)
+- one shift's estimated pay for the selected license (*"One 12-hour RN shift ≈ $546"*)
 
 **Pin placement.** About ten pills are labelled, as on Airbnb, chosen nearest first and spaced by **screen pixels at the current zoom**, so labels never pile up downtown on either a phone or a desktop. The rest are small dots. The coral house marks the city center.
 
@@ -148,7 +156,7 @@ monthly = shifts per month × hours per shift × median hourly wage (license, me
 - On touch devices, one finger keeps scrolling the page; zoom with the buttons or a pinch.
 - The map flies to a new city when you change it; with `prefers-reduced-motion` it jumps instead.
 
-**Engineering trade-off: MapLibre → Leaflet.** I first built the map with MapLibre GL (WebGL vector tiles). It looked great, but on a throttled mid-range phone, evaluating its 1 MB engine caused a **556 ms long task**: Lighthouse mobile performance was 73, with 560 ms of blocking time. Plotting ~100 dots around a city doesn't need a 3D vector engine. Switching to Leaflet with Esri's light-gray raster tiles:
+**Engineering trade-off: MapLibre → Leaflet.** I first built the map with MapLibre GL (WebGL vector tiles). It looked great, but on a throttled mid-range phone, evaluating its 1 MB engine caused a **556 ms long task**: Lighthouse mobile performance was 73, with 560 ms of blocking time. Plotting ~100 dots around a city doesn't need a 3D vector engine. Switching to Leaflet with Esri raster tiles (now the colored World Topo basemap):
 
 | | MapLibre GL | Leaflet |
 |---|---|---|
@@ -204,6 +212,8 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 | Coral | `#EF4651` | ESHYFT's logo color, used for the slider fill, home marker and search icon |
 | Coral ink | `#D42A37` → `#C8233A` gradient | The one brand button; white text passes AA (4.53–5.59:1) |
 
+- **Logo:** ESHYFT's horizontal logo (supplied PNG, 388×80, rendered at 32 px tall so it stays sharp on 2x screens). The "e" mark, cropped from the same file, is the favicon.
+- **Map:** Esri World Topo, a colored basemap (blue water, green parks, soft land tones) chosen as the closest free match to the pastel Google map on Airbnb's page.
 - **Type:** DM Sans, a free geometric sans close in feel to Airbnb Cereal.
 - **Weights and sizes:** headlines are bold with −3.5% tracking at 40–72 px; body is 16–20 px.
 - **Shape:** fully rounded buttons and pills, 16–24 px card radius, and soft shadows only on floating elements (map, popovers, dialogs).
@@ -213,7 +223,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 ## 10. Accessibility
 
 - **Contrast:** every text/background pair meets WCAG AA (verified with a script). This includes the brand button, which needed a darker coral than the logo.
-- **The slider** is a native `<input type="range">` with `aria-valuetext="8 shifts a month"`.
+- **The slider** is a native `<input type="range">` with `aria-valuetext="20 shifts a month"`.
 - **Dialogs** use the native `<dialog>` element (focus trap, Escape to close, backdrop).
 - **The location picker:** a labelled dialog with a listbox of cities; Escape or a click outside closes it.
 - **Map pins** are keyboard-focusable with descriptive titles. The decorative "you" marker is hidden from assistive tech.
@@ -262,7 +272,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 **First experiments:**
 1. **Estimate vs. no estimate.** Replicate Airbnb's finding for nurses: the current hero against this hero.
 2. **Default shifts:** 4 vs 8 vs 12. Higher numbers attract; lower numbers feel attainable.
-3. **Wage source:** BLS median vs ESHYFT's median posted rate. Does a higher, ESHYFT-specific number lift installs without hurting retention, i.e. do expectations match reality?
+3. **Wage source:** BLS median + 15% vs ESHYFT's median posted rate. Does a higher, ESHYFT-specific number lift installs without hurting retention, i.e. do expectations match reality?
 4. **Map:** distance pins vs no labels. Does "134 nursing homes near you" drive the click, or the number alone?
 
 ---

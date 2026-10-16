@@ -2,18 +2,16 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef } from 'react'
 import type { City, Role, ShiftLength } from '../lib/estimate'
-import { formatUsd, meta } from '../lib/estimate'
+import { formatUsd, hourlyRate, meta } from '../lib/estimate'
 import { track } from '../lib/analytics'
 
 /** [lat, lon, milesFromCityCenter, certifiedBeds, cmsOverallRating] — see scripts/build-dataset.mjs */
 type Home = [number, number, number, number | null, number | null]
 
-// Muted gray basemap (Esri Light Gray Canvas) so the only color on the map is ours,
-// the same role Google's light basemap plays on Airbnb's host page. Labels are a
-// separate layer so they sit above the dots.
-const TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
-const LABELS = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}'
-const ATTRIBUTION = 'Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap contributors'
+// Colored basemap (Esri World Topo): blue water, green parks, soft land tones and
+// built-in labels, the closest free match to the pastel Google map on Airbnb's host page.
+const TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+const ATTRIBUTION = 'Tiles © Esri — Esri, HERE, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors'
 
 const PILL_COUNT = 10 // Airbnb labels about a dozen listings; the rest are dots
 const PILL_SPACING_PX = 72 // keep labels from piling up downtown…
@@ -83,9 +81,9 @@ export default function NursingHomeMap({ city, role, hours }: { city: City; role
   const initialCenter = useRef<L.LatLngTuple>([city.lat, city.lon])
 
   // Keep the latest estimate inputs reachable from Leaflet event handlers.
-  const inputs = useRef({ role, hours, hourly: city.wages[role] })
+  const inputs = useRef({ role, hours, hourly: hourlyRate(city, role) })
   useEffect(() => {
-    inputs.current = { role, hours, hourly: city.wages[role] }
+    inputs.current = { role, hours, hourly: hourlyRate(city, role) }
   }, [role, hours, city])
 
   // Create the map once; later city changes fly the camera instead.
@@ -103,7 +101,6 @@ export default function NursingHomeMap({ city, role, hours }: { city: City; role
     })
     // detectRetina: sharp tiles on phones (Esri has no @2x tiles, so Leaflet requests z+1 at half size).
     L.tileLayer(TILES, { attribution: ATTRIBUTION, maxZoom: 16, detectRetina: true }).addTo(m)
-    L.tileLayer(LABELS, { maxZoom: 16, pane: 'shadowPane', detectRetina: true }).addTo(m)
     L.control.zoom({ position: 'bottomright' }).addTo(m)
     m.attributionControl.setPrefix(false)
     layer.current = L.layerGroup().addTo(m)

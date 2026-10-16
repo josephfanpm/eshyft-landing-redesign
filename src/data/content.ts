@@ -48,7 +48,7 @@ export const faqGroups: FaqGroup[] = [
     title: 'Pay',
     items: [
       { q: 'How fast do I get paid?', a: 'You can get paid weekly, or use Instant Pay for next-day or same-day access to your earnings. Instant Pay is powered by Stripe.' },
-      { q: 'How is my estimate calculated?', a: 'We multiply your shifts per month by your shift length and the median hourly wage for your license in your metro area, published by the U.S. Bureau of Labor Statistics. Actual shift rates are set by each facility and may be higher or lower.' },
+      { q: 'How is my estimate calculated?', a: 'We multiply your shifts per month by your shift length and an estimated hourly rate for your license in your metro area, based on U.S. Bureau of Labor Statistics wage data. Actual shift rates are set by each facility and may be higher or lower.' },
     ],
   },
   {
