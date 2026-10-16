@@ -1,111 +1,88 @@
-# ESHYFT Landing Page — a product-led redesign
+# ESHYFT for Nurses, rebuilt as Airbnb's host page
 
-> A concept redesign of [eshyft.com](https://eshyft.com), a two-sided marketplace that connects per diem CNAs, LPNs and RNs with shifts at nursing homes. I research what's holding the current page back, apply what Y Combinator, Nielsen Norman Group and the best marketplaces (Airbnb, Uber, Lyft, DoorDash, Clipboard, Nursa) do, and ship it as a fast, accessible, animated React site.
+A concept redesign of **[eshyft.com/nurses](https://eshyft.com/nurses/)**, the page that recruits CNAs, LPNs and RNs to ESHYFT's per diem staffing marketplace. It follows the playbook of **[Airbnb's host landing page](https://www.airbnb.com/host/homes)**. The page leads with a personalized, interactive earnings estimate ("You could make $X on ESHYFT") on top of a live map of nursing homes near you. The estimate is built on a real dataset of public wage and facility data. Philadelphia is the default city.
 
-**Two jobs, one page:** get **nurses to download the app** and get **facilities to book a sales consultation**.
+**Live demo:** https://josephfanpm.github.io/eshyft-landing-redesign/
+**Full write-up:** [docs/CASE_STUDY.md](docs/CASE_STUDY.md) explains why every part of the design was chosen.
 
-📖 **Read the full case study → [docs/CASE_STUDY.md](docs/CASE_STUDY.md)**
-
-<p align="center">
-  <img src="docs/screenshots/nurse-hero.png" alt="Nurse view: hero with headline, QR download, App Store rating and animated phone mockup" width="49%" />
-  <img src="docs/screenshots/facility-hero.png" alt="Facility view: hero with consultation CTA and animated shift board filling open shifts" width="49%" />
-</p>
+![Hero: "You could make $1,422 on ESHYFT", a shifts slider, a location pill and a map of 134 nursing homes around Philadelphia](docs/screenshots/hero-philadelphia.png)
 
 ---
 
-## Results at a glance
+## Why Airbnb's host page?
 
-Lighthouse (v12, simulated mobile throttling) on the production build, compared with the live site on the same day:
+Airbnb's host page solves ESHYFT's problem. It persuades someone to supply their time or asset to a two-sided marketplace, and its answer is one personalized number. Lenny Rachitsky ran supply growth at Airbnb. He has written that earnings estimates were **"an order of magnitude more effective than any other value prop"** for recruiting hosts, and that growth dipped whenever they were hidden. The current ESHYFT nurses page already hints at this idea in a caption inside an image ("Earn an estimated $2,000 for working 10 invited shifts"). This redesign makes it the page.
 
-| | Live eshyft.com | This redesign (nurse / facility) |
-|---|---|---|
-| Performance | 39 | **95 / 93** |
-| Accessibility | 91 | **100 / 100** |
-| Best practices | 75 | **100 / 100** |
-| SEO | 92 | **100 / 100** |
-| Largest Contentful Paint | 27.1 s | **2.4 s / 2.9 s** |
-| Total Blocking Time | 690 ms | **30 ms / 10 ms** |
-| Total transfer size | 5,042 KiB | **247 / 254 KiB** |
-| Network requests | 172 | **7 / 8** |
+| Airbnb host page | This redesign |
+|---|---|
+| "Your home could make **$2,087** on Airbnb" | "You could make **$1,422** on ESHYFT" |
+| Slider: nights per month | Slider: shifts per month (1–20) |
+| Search pill: *Toronto · Entire place · 2 bedrooms* | Search pill: *Philadelphia · CNA · 8-hour shifts* |
+| Map of nearby listings with price pins | Map of nearby nursing homes with distance pins; tap one for a per-shift estimate |
+| "Learn how we estimate earnings" | The same link, opening the maths with your own numbers and its BLS source |
+| "Join millions of hosts": 3 icon columns | "Work per diem on your terms": flexible / pays fast / supported |
+| Co-host cards | Nurse testimonial cards (real quotes) + verified 4.7★ App Store rating |
+| AirCover checklist | "Every shift is backed by ESHYFT": Instant Pay, 24/7 support, Joint Commission |
+| Phones on gray cards | "Everything happens in the app": shifts + Instant Pay screens |
+| "Your questions, answered" | Grouped FAQ + "Contact support" |
 
-> These are lab numbers measured on 2026-10-16. The redesign was served locally while the live site was served from production, and the live page carries real-world weight (analytics, chat, forms, CMS) that a concept doesn't. Treat this as directional, not a like-for-like benchmark. The case study covers [the caveats](docs/CASE_STUDY.md#7-performance--accessibility).
+## The dataset
 
-## What changed and why (summary)
+`npm run data` runs [scripts/build-dataset.mjs](scripts/build-dataset.mjs), which rebuilds everything from two public sources with no API keys:
 
-| # | Change | Why |
-|---|---|---|
-| 1 | **Split the page by audience** with a toggle and deep-linkable `#nurses` / `#facilities` views | Two audiences with opposite needs; every leading marketplace gives each side its own page |
-| 2 | **One contextual CTA** instead of 5 competing header buttons | Clarity: the CTA becomes "Get the app" or "Book a consultation" depending on who you are |
-| 3 | **Plain-language, benefit-first headlines** | Passes Michael Seibel's "explain it back" test; written at a ~6th-grade reading level |
-| 4 | **Verified 4.7★ / 3,991-rating proof** replaces the unsupported "top-rated" claim | Third-party proof is trusted more than self-claims (NN/g). No competitor shows ratings, so it's a differentiator |
-| 5 | **Nurse earnings estimator** | At Airbnb, earnings estimates were "an order of magnitude more effective" than any other supply value prop |
-| 6 | **Desktop QR + "text me the link"; store badges on mobile** | Bridges desktop visitors to a mobile download (Lyft/DoorDash pattern) |
-| 7 | **Coded, animated product mockups** | "Show the product" is YC's top website note; code-built UI is sharp and weighs almost nothing |
-| 8 | **State checker** replaces a list of 30 links that all point to the same article | Answers the real question: "Can I work in my state?" |
-| 9 | **Agency-cost estimator** for facilities, grounded in Health Affairs data | Quantifies the buyer's pain without inventing ESHYFT savings claims |
-| 10 | **Inline consult form → instant time-slot booking** | Replaces a hidden modal and "we'll reach out" with booking the meeting in-flow |
-| 11 | **Pain → fix narrative, process steps, FAQs** | De-risks the sales call for B2B buyers |
-| 12 | **Accessible brand colors** | White on the brand coral/blue fails WCAG AA, so I added `-strong` shades that pass |
-| 13 | **Funnel instrumentation** | Every conversion-relevant interaction emits an event, so the redesign can be measured and A/B tested |
+| Source | What it provides |
+|---|---|
+| **U.S. Bureau of Labor Statistics, OEWS (May 2025)** | Median hourly wage for CNAs (31-1131), LPNs (29-2061) and RNs (29-1141) in each metro area |
+| **CMS Nursing Home Provider Information (processed 2026-09-01)** | All 14,690 Medicare/Medicaid-certified nursing homes, with coordinates, bed count and CMS star rating |
 
-## Tech stack
+- **Output:** 56 metros covering all 30 states ESHYFT serves, and 2,763 nursing homes within 15 miles of a metro center.
+- **Philadelphia (the default):** CNA $22.22/hr · LPN $34.00/hr · RN $48.64/hr, with 134 nursing homes within 15 miles.
+- **Privacy:** facility names are dropped, so the page never implies a specific nursing home is an ESHYFT partner.
 
-| Layer | Choice | Why |
-|---|---|---|
-| Build | **Vite 8** + **React 19** + **TypeScript** | Fast dev loop, static `dist/` that deploys anywhere |
-| Styling | **Tailwind CSS v4** (CSS-first `@theme` tokens) | Design tokens in CSS, no config file, tiny output |
-| Motion | **Motion 14** (`motion/react`) via `LazyMotion` + `m` | Layout animations, presence, scroll-linked effects. The feature bundle loads async |
-| Smooth scroll | **Lenis** | Disabled automatically for `prefers-reduced-motion` |
-| Icons | **lucide-react** | Tree-shaken SVG icons |
-| QR | **qrcode.react** | Desktop-to-mobile bridge |
-| Fonts | Self-hosted **Bricolage Grotesque** + **Inter** (variable) | No third-party font requests |
+## Results
 
-I deliberately skipped GSAP, Three.js, Lottie and Rive. Each adds 60–250 KB+ for effects this page doesn't need. See the [library research](docs/CASE_STUDY.md#6-choosing-the-stack).
+Lighthouse 12 (simulated throttling), same day, compared with the live page:
 
-## Motion design
+| | Live eshyft.com/nurses | Redesign (mobile) | Redesign (desktop) |
+|---|---|---|---|
+| Performance | 39 | **97** | **99** |
+| Accessibility | 91 | **100** | **100** |
+| Best practices | 75 | **100** | **100** |
+| SEO | 92 | **100** | **100** |
+| Largest Contentful Paint | 24.8 s | **2.3 s** | **1.0 s** |
+| Total Blocking Time | 660 ms | **40 ms** | **0 ms** |
+| Page weight | 4,378 KiB | 458 KiB | 319 KiB |
 
-- **Audience toggle:** a spring-animated pill (shared `layoutId`), with a blur-crossfade between pages and the ambient background shifting coral → blue
-- **Phone mockup:** loops browse → **Booked** → Instant Pay notification
-- **Shift board:** open shifts flip to **Filled** with the matched nurse
-- **Scroll effects:** a progress bar, a "how it works" line that draws as you scroll, staggered reveals
-- **Numbers:** counters that count up into view, and calculator results that spring between values
-- **Logo and testimonial marquees:** CSS-only, pause on hover
+The redesign was served locally and the live page from production, so these numbers are directional. The case study explains how the map went from 287 KB to 45 KB of JavaScript.
 
-All of it respects `prefers-reduced-motion`. Animations become instant, the marquees stop, and smooth scroll turns off. The hero `<h1>` is never hidden behind an entrance animation, because it's the LCP element.
+## Stack
 
-## Run it locally
+**Vite 8 · React 19 · TypeScript · Tailwind CSS v4 · Leaflet · DM Sans.** Motion is CSS transitions plus Leaflet's `flyTo`. There's no animation library.
+
+## Run it
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # type-check + production build to dist/
-npm run preview    # serve the production build
+npm run dev       # http://localhost:5173
+npm run build     # type-check + production build
 npm run lint
+npm run data      # rebuild the dataset from BLS + CMS
 ```
 
-Deep links: `/#nurses` (default) and `/#facilities`.
+You can link straight to any estimate: `?city=pittsburgh-pa&role=RN&shifts=12&hours=12`
 
-## Deploy
-
-- **GitHub Pages:** `.github/workflows/deploy.yml` builds with `GH_PAGES=1` (sets the `/eshyft-landing-redesign/` base path) and publishes on every push to `main`. Enable it under *Settings → Pages → Source: GitHub Actions*.
-- **Vercel / Netlify:** import the repo; it's auto-detected as Vite (output `dist`).
-
-## Project structure
+## Structure
 
 ```
-src/
-  data/content.ts           # all copy + facts (sourced) + illustrative values (labelled)
-  lib/                      # analytics, audience routing (URL hash), scroll, formatting
-  components/               # toggle, nav, mockups, marquee, counters, FAQ, download panel…
-  sections/
-    nurse/                  # hero, earnings estimator, how-it-works, Instant Pay, testimonials, state checker
-    facility/               # hero, pain→fix, agency-cost estimator, process, consult form
-    shared/                 # hero shell, proof bar, cross-sell
-docs/
-  CASE_STUDY.md             # full research, reasoning and trade-offs
-  screenshots/
+scripts/build-dataset.mjs        BLS + CMS → src/data/cities.json, public/data/nursing-homes/*.json
+src/lib/estimate.ts              the estimate formula, city data, formatting
+src/lib/useEstimatorState.ts     estimator state ↔ URL query string
+src/components/EarningsHero.tsx  headline, slider, location pill, lazy map
+src/components/NursingHomeMap.tsx Leaflet map, pins, per-shift cards
+src/sections/                    the rest of the page, one file per section
+docs/CASE_STUDY.md               research, reasoning, trade-offs
 ```
 
 ---
 
-**Disclaimer:** This is an independent concept for portfolio purposes and is not the official ESHYFT website. The ESHYFT name, mark and customer names belong to their owners. Testimonials are quoted from eshyft.com, and ratings come from the public App Store API. Pay and savings figures are labelled illustrative estimates. Forms don't send data.
+*Independent concept for portfolio purposes; not an official ESHYFT page. The ESHYFT name and mark belong to ESHYFT. Testimonials are quoted from eshyft.com/nurses. Map tiles © Esri; map data © OpenStreetMap contributors.*

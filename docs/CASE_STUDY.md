@@ -1,392 +1,322 @@
-# Case study: redesigning ESHYFT's landing page for a two-sided marketplace
+# Case study: redesigning ESHYFT's nurse page around one number
 
-**Author:** Joseph Fan · **Date:** October 2026 · **Type:** Independent concept (not the official ESHYFT site)
+**Author:** Joseph Fan · **October 2026** · Independent concept, not an official ESHYFT page
 
 ---
 
 ## TL;DR
 
-ESHYFT's homepage has to convert two very different visitors: **nurses**, who should download the app, and **facility managers**, who should book a sales consultation. The current page looks polished, but it serves both audiences at once. It has five competing header CTAs, makes proof claims it doesn't back up, gives facilities little persuasion, and scores **39/100** for mobile performance with a **27-second LCP** under Lighthouse's throttled mobile test.
+ESHYFT's nurse page has one job: **get CNAs, LPNs and RNs to download the app.** Today it describes the product ("Work when you want. Get paid when you're done.") without answering the question a nurse actually has: *what would I make, and where?*
 
-I audited the page, researched what YC, Nielsen Norman Group and leading marketplaces recommend, and rebuilt it as an **audience-split, single-CTA, proof-first** experience with tasteful motion. The rebuild scores **93–100** on performance and **100** on accessibility, best practices and SEO, transfers **~250 KiB** (the live page transfers 5 MB), and instruments every step of both funnels so it can be A/B tested.
+I rebuilt the page using the **Airbnb host page** as the model, because that page is the best-tested answer to "convince someone to supply a marketplace." The redesign leads with a personalized number:
+
+> **You could make $1,422 on ESHYFT**
+> 8 shifts a month · $22.22/hr · Philadelphia · CNA
+
+A slider, a location/license picker and a live map of the **134 nursing homes within 15 miles of Philadelphia** let the visitor make the estimate their own. Every number comes from a reproducible dataset built from **BLS wage data** and **CMS's federal nursing home directory**, covering 56 metros in all 30 states ESHYFT serves.
+
+On mobile, Lighthouse performance went from **39 to 97** and largest contentful paint (LCP, when the main content finishes loading) from **24.8 s to 2.3 s**. Accessibility, best practices and SEO all reach **100**.
 
 ---
 
 ## Contents
 
-1. [Context and goals](#1-context-and-goals)
-2. [How I approached it](#2-how-i-approached-it)
-3. [Audit of the current page](#3-audit-of-the-current-page)
-4. [Research](#4-research)
-5. [The improvements, one by one](#5-the-improvements-one-by-one)
-6. [Choosing the stack](#6-choosing-the-stack)
-7. [Performance & accessibility](#7-performance--accessibility)
-8. [Measurement plan](#8-measurement-plan)
-9. [Trade-offs and what I'd do next](#9-trade-offs-and-what-id-do-next)
-10. [Fact sheet](#10-fact-sheet)
-11. [Sources](#11-sources)
+1. [The brief](#1-the-brief)
+2. [Why Airbnb's host page](#2-why-airbnbs-host-page)
+3. [What the current page gets wrong](#3-what-the-current-page-gets-wrong)
+4. [Design principles](#4-design-principles)
+5. [Section by section: what and why](#5-section-by-section-what-and-why)
+6. [The earnings estimate](#6-the-earnings-estimate)
+7. [The map](#7-the-map)
+8. [The dataset](#8-the-dataset)
+9. [Visual system](#9-visual-system)
+10. [Accessibility](#10-accessibility)
+11. [Performance](#11-performance)
+12. [How I'd measure it](#12-how-id-measure-it)
+13. [Limitations and next steps](#13-limitations-and-next-steps)
+14. [Where every number comes from](#14-where-every-number-comes-from)
 
 ---
 
-## 1. Context and goals
+## 1. The brief
 
-ESHYFT is a per diem staffing marketplace. **Supply** is CNAs, LPNs and RNs who pick up shifts. **Demand** is nursing homes and long-term care (LTC) facilities that post them. It operates in 30 states.
+- **Page:** [eshyft.com/nurses](https://eshyft.com/nurses/)
+- **Audience:** CNAs, LPNs and RNs considering per diem work, mostly on phones and often arriving from ads or search.
+- **One conversion:** install the nurse app (App Store or Google Play).
+- **Constraints:**
+  - Don't invent facts.
+  - Don't imply partnerships that may not exist.
+  - Be fast on a mid-range phone.
+  - Meet WCAG AA.
 
-| Audience | Primary conversion | What they need to believe |
+---
+
+## 2. Why Airbnb's host page
+
+Two-sided marketplaces have a "hard side": the supply that's harder to acquire and keep (Andrew Chen, *The Cold Start Problem*). For Airbnb that's hosts; for ESHYFT it's nurses. Airbnb's host page is the most refined page anyone has built for winning that side.
+
+- **The number is the pitch.** Lenny Rachitsky, who led supply growth at Airbnb, writes that earnings estimates were **"an order of magnitude more effective than any other value prop"**, and that growth dipped whenever they were hidden ([source](https://andrewchen.com/grow-marketplace-supply/)).
+- **It's personal and interactive.** The visitor moves a slider and picks their city, so the number becomes *theirs*. A static "earn up to $X" claim reads as marketing.
+- **It's honest by design.** "Learn how we estimate earnings" sits right under the number, showing the method upfront rather than in fine print. That builds trust (NN/g's "upfront disclosure"), and the method stays visible right where the claim is made.
+- **It's calm.** One accent color, big type, lots of white space, and no motion for motion's sake. Every section is one idea.
+
+ESHYFT already gestures at this idea. The current hero image contains a small caption: *"Earn an estimated $2,000 for working 10 invited shifts at this facility."* It's ESHYFT's most persuasive sentence, and it's baked into a PNG. The redesign turns that sentence into the page.
+
+---
+
+## 3. What the current page gets wrong
+
+![Current eshyft.com/nurses hero](screenshots/before-eshyft-nurses.png)
+
+| # | Finding | Why it matters |
 |---|---|---|
-| **Nurses (supply)** | Download the nurse app | "I'll earn good money, on my schedule, near home, and get paid fast." |
-| **Facilities (demand)** | Book a consultation with sales | "This will reliably fill my shifts with qualified people, cost less than agencies, and be low-risk to try." |
-
-**Success metrics I designed for:**
-- Nurse: store-badge click-through rate and QR/SMS link requests per visitor
-- Facility: consult-form start rate, completion rate, and booked-meeting rate
-- Guardrails: Core Web Vitals (LCP < 2.5 s, CLS < 0.1) and a WCAG AA accessibility score
-
----
-
-## 2. How I approached it
-
-```
-Audit ──► Research ──► Principles ──► Design + build ──► Measure ──► (A/B test plan)
-```
-
-1. **Audit.** I walked the live page top to bottom, scraped its structure, ran Lighthouse, and pulled real App Store data for ESHYFT and 25+ competitors from the iTunes Search API.
-2. **Research.** Y Combinator's website guidance, conversion research (NN/g, Unbounce, Google/Deloitte), marketplace growth writing (Lenny Rachitsky, Andrew Chen, NFX), and a teardown of how Airbnb, Uber, Lyft, DoorDash and six nurse-staffing competitors handle two audiences.
-3. **Principles.** I distilled the research into rules I could check every design decision against (§5 intro).
-4. **Design and build.** The site is a production-quality React build, not a mockup, so the performance and accessibility claims are measurable.
-5. **Measure.** Lighthouse before and after. The analytics events are wired in so the next step, real A/B tests, is ready to run.
-
-One rule throughout: **don't invent facts.** Every claim on the page is sourced from eshyft.com or a public API. Anything estimated (pay rates, savings) is labelled as illustrative on the page itself (§10).
+| 1 | **The value prop is generic.** "Work when you want. Get paid when you're done." could describe any gig app. | Pay is the main reason nurses go per diem. Any competitor could make the same promise, and it gives no specific reason to choose ESHYFT. |
+| 2 | **The pay figure is hidden inside an image.** The only earnings claim is a caption baked into the hero image. | It can't be read by screen readers or search engines, and it can't be personalized. |
+| 3 | **There's no answer to "where?"** 30 state names (unsorted) all link to the same help article. | The second question after "how much?" is "is there work near me?" |
+| 4 | **The header has five competing actions:** For Nurses ▾, For Facilities ▾, Company ▾, Sign In, "Schedule a consultation", "Get started ▾". | On a nurse page, a facility sales CTA is noise. |
+| 5 | **Proof is missing.** The app's verified **4.7★ from 3,991 App Store ratings** never appears. | Third-party proof beats self-claims (NN/g, Trustworthy Design). |
+| 6 | **It's slow.** Lighthouse mobile: performance 39, LCP 24.8 s, 4.4 MB, 156 requests. | Deloitte/Google tie a 0.1 s mobile speed gain to measurable conversion lifts. |
+| 7 | **There are contrast failures.** White on brand blue (#3399FF) is 2.94:1, and coral (#EF4651) on white is 3.7:1. | Both fail WCAG AA. Nurses often read their phones outdoors or in bright hallways. |
 
 ---
 
-## 3. Audit of the current page
+## 4. Design principles
 
-![Live eshyft.com hero, October 2026](screenshots/before-live-hero.png)
+1. **One number, made personal.** Everything above the fold serves the estimate.
+2. **Show the method next to the claim.** No asterisks.
+3. **Use real data or nothing.** Every figure is sourced, and estimates say they're estimates.
+4. **Restraint over decoration.** I avoided the tells of a generic template: dark gradients, glowing blobs, gradient text, eyebrow pills, marquees and scroll-triggered fades. Motion only appears where it explains something (the map flying to a new city, a pin highlighting).
+5. **One primary action.** "Get the app," everywhere.
 
-To be fair to the current page: it has good bones. There's a two-button audience split in the hero, real app imagery, real nurse testimonials, a Joint Commission badge, and an Instant Pay feature. The problems are structural, not cosmetic.
+---
 
-| # | Finding | Evidence | Why it hurts conversion |
+## 5. Section by section: what and why
+
+| Section | Airbnb equivalent | What I built | Why |
 |---|---|---|---|
-| A1 | **Too many competing CTAs** | The header alone has "Sign In", "Schedule a consultation", "Get started ▾", "Apply today" and "Schedule a call", with more in the hero and footer | Choice overload. "Get started" doesn't say for whom. The same action is called "consultation", "call" and "demo" |
-| A2 | **One page serving two audiences** | Most of the page is nurse-focused (app, how it works, Instant Pay, testimonials). Facility persuasion is a logo strip plus links away | Facility managers, the higher-value conversion, get almost nothing to convince them on the homepage |
-| A3 | **Unsupported proof** | "See why ESHYFT is the top-rated app…" with no rating shown. "Hundreds of nursing homes" is the only scale metric | NN/g: unsubstantiated claims reduce trust. The real rating (4.7★, 3,991 reviews) is strong but invisible |
-| A4 | **Headline describes the company, not the benefit** | "ESHYFT connects CNAs, LPNs, & RNs to per diem shifts at long term care facilities" | Accurate, but a nurse wants to know what *they* get (money, flexibility, speed) |
-| A5 | **No earnings information** | No pay ranges or estimator | Pay is the #1 reason nurses go per diem. Hiding it reads as "not open enough" (NN/g) |
-| A6 | **Location list is a dead end** | 30 state links that all point to the same help article | It looks like content but answers nothing |
-| A7 | **Hidden contact form** | The general "Contact us" form lives in a modal and isn't role-specific | Facility leads hit friction and generic routing |
-| A8 | **No ROI argument on the homepage** | The ROI Calculator exists but is buried in the nav and footer | The strongest B2B argument, cost compared with agencies, is never made on the page |
-| A9 | **Performance** | Lighthouse mobile: **Performance 39, LCP 27.1 s, TBT 690 ms, 5 MB, 172 requests** | Deloitte/Google found a 0.1 s mobile speed gain lifted lead-gen form progression by 21.6% |
-| A10 | **Accessibility** | Lighthouse flags color contrast, heading order and unnamed links. Several images have filename alt text | Excludes users, and contrast failures also hurt readability outdoors on phones, where nurses browse |
+| **Header** | Logo + "Get started" | Logo + "Get the app" (sticky full-width button on mobile) | One action. On a phone the button goes straight to ESHYFT's own Branch smart link; on desktop it opens a QR code. |
+| **Hero** | "Your home could make $X on Airbnb" | "You could make **$X** on ESHYFT", with the number on its own line | The number is the largest thing on the page. Explicit line breaks keep the number on its own line at every width. |
+| **Slider** | Nights per month | Shifts per month, 1–20, default 8 (two a week) | A month is the unit people budget in. 8 is a realistic side-income default; 20 covers near full time. |
+| **Location pill** | *Toronto · Entire place · 2 bedrooms* | *Philadelphia · CNA · 8-hour shifts* | Location, license and shift length are the three variables that actually change pay. One popover holds all three. |
+| **Map** | Nearby listings with prices | Nearby nursing homes with distance pins; tap for a per-shift estimate | Answers "is there work near me?" (§7) |
+| **Support banner** | "Curious about hosting? Let's talk" | "New to per diem? Get answers from ESHYFT's support team, 24/7." | First-time per diem nurses have the most questions. This uses the page's real 24/7 support claim. |
+| **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
+| **Testimonials** | Co-host cards | Four real quotes from the current page, with license and state, under the verified App Store rating | Peer proof; a nurse looks for someone like them. |
+| **Backed by ESHYFT** | AirCover checklist | Instant Pay (Stripe), 24/7 support, Joint Commission certification, 30 states | Removes the fear of the unknown, with no claim the current site doesn't already make. |
+| **App showcase** | Phones on gray cards | "Find shifts near you" + "Cash out when you want" | Shows the product. The Instant Pay screen reuses ESHYFT's real marketing numbers ($2,346.77 balance, $450 cash-out) and its blue "Cash out" button. |
+| **Coverage** | — | The 30 states, sorted, in columns | Keeps the useful part of the old location list and drops the 30 identical links. |
+| **FAQ** | "Your questions, answered" | Grouped accordions (getting started / pay / support) + "Contact support" | Native `<details>` elements, so they're accessible and need no JavaScript. Every answer is drawn from the current site. |
+
+What I removed: facility sales CTAs, the "Company" mega-menu, and decorative stickers and badges around photos. Facility links stay in the footer.
 
 ---
 
-## 4. Research
+## 6. The earnings estimate
 
-### 4.1 Y Combinator: clarity over cleverness
+```
+monthly = shifts per month × hours per shift × median hourly wage (license, metro)
+```
 
-- **Explain it simply.** In YC's Design Review series, Aaron Epstein and Garry Tan test how fast a first-time visitor understands what the product does, and warn that clever copy backfires ([YC blog](https://www.ycombinator.com/blog/design-review-watch-aaron-and-garry)).
-- **Show the product early** and lead with its most impressive capability ("feat of strength") (same source).
-- **Michael Seibel's test:** write two sentences about what you do and ask someone to explain them back. "If they can't explain it, you are wrong, not them." ([Quartz](https://qz.com/africa/795674/how-to-get-into-y-combinator-ceo-michael-seibels-advice-to-nigerian-start-up-founders))
-- **Marketplaces** face chicken-and-egg, supply/demand balance and trust problems. Solve the hard side first (YC office hours; see also §4.3).
+**Why the BLS median, and not a higher "per diem rate"?**
+- **It's defensible.** It's the U.S. government's published median for that occupation in that metro.
+- **It's conservative.** Per diem rates are often above staff medians. An estimate that under-promises builds more trust than one that over-promises, and keeps the claim legally safe (Airbnb's estimate carries the same caveat).
+- **It's explainable.** The "estimate earnings" dialog shows the maths with the visitor's own numbers: *$22.22/hr × 8 hrs × 8 shifts = $1,422*.
+- **In production I'd switch to ESHYFT's own data:** the median *posted* rate by license and metro over the last 90 days. That's proprietary, so this public repo deliberately doesn't use it.
 
-**Applied:** headlines a nurse can repeat back ("Pick up nursing shifts near you. Get paid today."), the product shown animated in the hero, and the strongest proof placed next to the CTA.
+**Why Philadelphia by default?** ESHYFT is headquartered in New Jersey, Pennsylvania has three of the six testimonials on the current page, and Philadelphia is the largest metro in that region with deep nursing home density. A production version would default to the visitor's IP-derived metro.
 
-### 4.2 Conversion research
+**Shareable state.** The estimate lives in the URL (`?city=pittsburgh-pa&role=RN&shifts=12&hours=12`). Recruiters and paid ads can link to a localized estimate ("RNs in Pittsburgh could make $5,702"), and nurses can share their number.
 
-- **Attention is front-loaded.** About 57% of viewing time is above the fold and about 74% is in the first two screens ([NN/g, Scrolling and Attention](https://www.nngroup.com/articles/scrolling-and-attention/)). Proof has to be in the first two screenfuls, which is why I added a proof bar directly under the hero.
-- **F-pattern scanning.** Front-load headings with the words that carry information ([NN/g](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/)).
-- **Trust** comes from design quality, upfront disclosure (prices, contact), comprehensive content, and connection to the rest of the web. **Third-party proof beats self-reported testimonials** ([NN/g, Trustworthy Design](https://www.nngroup.com/articles/trustworthy-design/)). That led to App Store ratings over "top-rated", and a visible phone number.
-- **Reading level.** Unbounce's benchmark found pages written at a 5th–7th grade level convert at an 11.1% median, against 5.3% for college-level copy (reported via [MarketingProfs](https://marketingprofs.com/charts/2024/52374/landing-page-conversion-benchmarks)).
-- **Speed.** "Milliseconds Make Millions" (Deloitte/Google, 37 brands): a 0.1 s mobile speed improvement was associated with **+21.6% progression to form submission on lead-gen sites** ([web.dev](https://web.dev/case-studies/milliseconds-make-millions)). This is correlational, but directionally strong.
+---
 
-### 4.3 Marketplace playbooks
+## 7. The map
 
-- **"Supply is king."** Lenny Rachitsky (ex-Airbnb): state the supply value proposition "boldly and directly". Put supply call-outs everywhere, "more aggressive than you're comfortable with". **Earnings estimates were "an order of magnitude more effective than any other value prop"** for Airbnb hosts, and growth dipped when they were hidden ([28 ways to grow supply](https://andrewchen.com/grow-marketplace-supply/)).
-- **Win the hard side first.** In *The Cold Start Problem*, Andrew Chen calls the supply side the "hard side": harder to acquire and retain, and it creates disproportionate value ([andrewchen.com](https://andrewchen.com/solve-a-hard-problem-cold-start-problem/)). This is why **nurses are the default view**.
-- **NFX's chicken-or-egg tactics** include getting the hardest side first and giving each side standalone value ([NFX](https://www.nfx.com/post/19-marketplace-tactics-for-overcoming-the-chicken-or-egg-problem)).
+**What it shows: real nursing homes, not "available shifts."** Airbnb's map shows comparable listings. The honest ESHYFT equivalent is *places a nurse could work*: every Medicare/Medicaid-certified nursing home within 15 miles, from CMS.
+- I **don't** label pins as ESHYFT shifts or partners. I don't know which facilities partner with ESHYFT, and implying it would be misleading.
+- Facility names are dropped from the dataset for the same reason.
+- The footer states plainly: *"not all are ESHYFT partners."*
 
-### 4.4 Competitive teardown
+**Why distance on the pins instead of prices?** Every pin in a metro would show the same estimated pay, which is meaningless repetition. Distance varies, and "near home" is the other half of the per diem promise. Tapping a pin opens a card with:
+- bed count
+- the CMS star rating
+- one shift's estimated pay for the selected license (*"One 12-hour RN shift ≈ $475"*)
 
-**How two-sided marketplaces split their audiences:**
+**Pin placement.** About ten pills are labelled, as on Airbnb, chosen nearest first and spaced by **screen pixels at the current zoom**, so labels never pile up downtown on either a phone or a desktop. The rest are small dots. The coral house marks the city center.
 
-| Company | Pattern | Supply-side hook |
+**Interaction choices**
+- Scroll-wheel zoom is off, so the map never hijacks page scrolling.
+- On touch devices, one finger keeps scrolling the page; zoom with the buttons or a pinch.
+- The map flies to a new city when you change it; with `prefers-reduced-motion` it jumps instead.
+
+**Engineering trade-off: MapLibre → Leaflet.** I first built the map with MapLibre GL (WebGL vector tiles). It looked great, but on a throttled mid-range phone, evaluating its 1 MB engine caused a **556 ms long task**: Lighthouse mobile performance was 73, with 560 ms of blocking time. Plotting ~100 dots around a city doesn't need a 3D vector engine. Switching to Leaflet with Esri's light-gray raster tiles:
+
+| | MapLibre GL | Leaflet |
 |---|---|---|
-| Airbnb | Separate "Airbnb your home" page | **Earnings estimator in the hero** |
-| Uber | Demand-first homepage; separate Drive page | "Drive when you want, make what you need"; Instant Pay |
-| Lyft | Separate driver page | **Phone-number capture in the hero**; named driver testimonials |
-| DoorDash | Separate Dasher subdomain | Phone capture; pay explained; instant cash-out |
-| Clipboard | Dual CTAs side by side | **Quantified fill rate** ("95% of shifts get staffed when posted a day in advance"); facility-role testimonials |
-| Nursa | Nav tabs: Clinicians / Facilities | **Shows average pay by role and city** |
-| CareRev | Dual headline, dual CTAs | Savings stats for hospitals |
-| ShiftMed | Facility-first | **Savings calculator** for facilities |
+| Map JS (gzipped) | 287 KB | **45 KB** |
+| Total Blocking Time (mobile) | 560 ms | **0–40 ms** |
+| Lighthouse performance (mobile) | 73 | **97** |
 
-Sources: each site, fetched 2026-10-16. Upwork, Fiverr, Thumbtack and Instacart blocked automated fetching, so I left them out rather than describe them from memory.
+Two follow-up fixes:
+- `detectRetina` sharpens tiles on phones. As a side effect, a map tile no longer outranks the headline as the LCP element.
+- `isolation: isolate` on the map container stops Leaflet's internal z-indexes from painting over the sticky header and CTA.
 
-**Patterns I adopted:**
-1. Each audience gets its own focused experience with its own CTA.
-2. The supply side leads with money and flexibility, plus fast pay.
-3. The supply side captures intent in the hero (a phone number or app download).
-4. The demand side leads with outcomes (coverage) and cost, then de-risks the call.
+---
 
-**App Store ratings, collected from the iTunes Search API on 2026-10-16:**
+## 8. The dataset
 
-| App | Rating | # ratings |
+[`scripts/build-dataset.mjs`](../scripts/build-dataset.mjs) rebuilds everything with one command (`npm run data`), from two public APIs that need no key:
+
+**1. BLS Occupational Employment and Wage Statistics, May 2025**
+- Series `OEU M <area> 000000 <SOC> 08`, where 08 is the hourly median wage.
+- SOC codes: 31-1131 Nursing Assistants, 29-2061 LPNs, 29-1141 RNs.
+- 159 series across 53 metro areas.
+
+**2. CMS Nursing Home Provider Information, processed 2026-09-01**
+- All 14,690 certified nursing homes, with latitude/longitude, certified beds and overall star rating.
+
+| Output | Contents |
+|---|---|
+| `src/data/cities.json` | 56 cities, each with metro name, CNA/LPN/RN median wages, and a count of nursing homes within 15 miles |
+| `public/data/nursing-homes/<city>.json` | Compact tuples `[lat, lon, miles, beds, rating]`, sorted by distance (~4 KB per city, loaded on demand) |
+
+**Coverage:** every one of the 30 states ESHYFT lists, with 2,763 nursing homes inside the 56 radii.
+
+**Range check:**
+
+| License | Lowest | Highest |
 |---|---|---|
-| CareRev | 4.80 | 1,675 |
-| Nursa | 4.75 | 7,749 |
-| **ESHYFT – Per Diem Nursing** | **4.72** | **3,991** |
-| ShiftKey | 4.69 | 27,535 |
-| Clipboard – Workers | 4.63 | 22,913 |
-| IntelyCare | 4.19 | 1,199 |
-| ShiftMed | 3.12 | 1,025 |
-
-ESHYFT's rating is **among the best in the category**, and **none of these competitors show their rating on their homepage**. This is cheap, verifiable differentiation, so it goes right under the hero CTA.
-
-### 4.5 What each side actually cares about
-
-- **Facilities.** Agency staff cost nursing homes **50–60% more per hour** than direct employees. The share of homes using agency staff rose from 23% (2018) to nearly half (2022), and heavier agency use correlated with lower CMS star ratings (Health Affairs 2024, via [Skilled Nursing News](https://skillednursingnews.com/2024/02/states-where-nursing-homes-used-the-most-agency-nursing-staff-in-2022/)). Facilities also care about fill rate and speed, credentialing and compliance (Joint Commission certification), and continuity of care.
-- **Nurses.** Pay rate is the main reason to go per diem, flexibility now rivals pay as a satisfaction driver, and fast or instant pay appears in every competitor's supply pitch.
+| CNA | $17.00/hr (Little Rock) | $23.69/hr (Newark / New York) |
+| LPN | $26.14/hr (Charleston, WV) | $39.52/hr (Boston) |
+| RN | $36.80/hr (Wichita) | $57.56/hr (Newark / New York) |
 
 ---
 
-## 5. The improvements, one by one
+## 9. Visual system
 
-**Principles I checked every decision against:**
-1. **One audience, one goal, one CTA per view.**
-2. **Benefit first, in plain words** (~6th-grade reading level).
-3. **Show, don't tell.** Put the product in the hero.
-4. **Prove it with third-party, specific numbers.** Never invent them.
-5. **Answer the objection before it's raised.**
-6. **Fast and accessible are features,** not polish.
+The design system copies Airbnb's choices; nothing visual is lifted from Airbnb itself.
 
-Each improvement below is written as problem → evidence → solution → how I'd measure it.
+| Token | Value | Use |
+|---|---|---|
+| Ink | `#222222` | All primary text (Airbnb's exact text color) |
+| Secondary | `#6A6A6A` | Supporting copy (5.41:1 on white) |
+| Hairline | `#DDDDDD` | Borders and dividers |
+| Mist | `#F7F7F7` | Alternating sections, icon tiles, cards |
+| Coral | `#EF4651` | ESHYFT's logo color, used for the slider fill, home marker and search icon |
+| Coral ink | `#D42A37` → `#C8233A` gradient | The one brand button; white text passes AA (4.53–5.59:1) |
 
-### 5.1 Split the page by audience
-- **Problem:** A1, A2. Both audiences share one scroll and one header full of CTAs.
-- **Evidence:** Airbnb, Uber, Lyft and DoorDash all give supply its own page. NN/g's attention data says you get about two screens to make your case.
-- **Solution:** An **audience toggle** ("I'm a nurse or CNA" / "I run a facility") in the nav, and in the hero on mobile. It swaps the entire page with a blur-crossfade. The choice lives in the URL hash (`#nurses` / `#facilities`), so:
-  - paid ads, emails and sales reps can **deep-link** to the right side
-  - the back button works
-  - the facility page is **code-split** and loads only when someone asks for it
-- **Default = nurses,** the hard side (Chen). A cross-sell card at the bottom of each view offers the other side, so a facility manager is never stuck.
-- **Measure:** `audience_selected` events (with source: toggle, cross-sell, footer), and bounce rate split by first view.
-
-### 5.2 One contextual CTA
-- **Problem:** A1. There are five header CTAs with three names for the same action.
-- **Solution:** The nav has exactly one primary button. It reads **"Get the app"** for nurses and **"Book a consultation"** for facilities. "Sign in" becomes a quiet text link. On mobile, a **sticky thumb-zone CTA** appears after the hero scrolls away and goes straight to the right store for iOS or Android.
-- **Measure:** `cta_clicked` by location (nav, hero, sticky, footer CTA).
-
-### 5.3 Benefit-first headlines
-- **Problem:** A4.
-- **Before:** "ESHYFT connects CNAs, LPNs, & RNs to per diem shifts at long term care facilities."
-- **After (nurse):** "Pick up nursing shifts near you. **Get paid today.**"
-- **After (facility):** "Fill open shifts with **trusted nurses.**"
-- **Why:** Each passes Seibel's explain-it-back test, leads with the outcome, and is written at about a 6th-grade level (Unbounce). The supporting line carries the specifics: per diem, nursing homes, Instant Pay.
-
-### 5.4 Replace "top-rated" with the actual rating
-- **Problem:** A3.
-- **Solution:** Show **★ 4.7 from 3,991 App Store ratings** right under the download CTA, and again in the proof bar and the testimonials section. The facility page shows the manager app's 4.7★.
-- **Why:** It's verifiable third-party proof (NN/g), it's competitively strong (§4.4), and no competitor does it.
-
-### 5.5 Nurse earnings estimator
-- **Problem:** A5.
-- **Evidence:** Airbnb's earnings estimator finding (Rachitsky). Nursa is the only nurse competitor that shows pay, and it uses static tables.
-- **Solution:** An interactive estimator: pick a license (CNA/LPN/RN), shifts per week (1–6) and shift length (8/12 h). It shows monthly and weekly estimates that spring smoothly between values.
-- **Honesty:** The rates are **illustrative** (CNA $24, LPN $38, RN $48/h, in line with public ranges Nursa shows), and this is disclosed in the UI. In production I'd feed it live median posted rates by role and state.
-- **Measure:** `calculator_used`, and download rate for users who touched the estimator compared with users who didn't.
-
-### 5.6 Desktop-to-mobile bridge
-- **Problem:** The conversion happens on a phone, but some visitors arrive on desktop.
-- **Solution:**
-  - **Mobile:** native store badges.
-  - **Desktop (≥1024 px):** a **QR code** plus a **"Text me the link"** phone field. This is the Lyft/DoorDash pattern of capturing intent in the hero.
-- **Production note:** The QR and SMS would use a smart link (Branch/AppsFlyer) carrying UTM attribution.
-
-### 5.7 Show the product, animated
-- **Evidence:** "Show the product early" (YC).
-- **Nurse hero:** A coded phone mockup loops the core job: shifts near you → tap **Book shift** → **Booked** → an *Instant Pay sent* notification.
-- **Facility hero:** A shift board where open shifts flip to **Filled**, showing the matched nurse and their rating, while a coverage bar climbs to 4/4. It shows the outcome facilities buy.
-- **Why code, not screenshots:** It's crisp at any pixel density, adds almost no bytes, works in dark mode, and the copy is easy to change.
-
-### 5.8 State checker instead of a dead-end list
-- **Problem:** A6.
-- **Solution:** "Is ESHYFT in your state?" A search box gives an instant yes or no ("Not yet — download to get notified"), and the matching tile on a 30-state grid lights up.
-- **Measure:** `state_checked` (with a found flag). A miss also signals expansion demand.
-
-### 5.9 Instant Pay gets its own moment
-- **Evidence:** Fast pay is in every supply-side competitor's pitch (Uber, Lyft, DoorDash, ShiftKey, ShiftMed).
-- **Solution:** A three-step timeline (clock out → tap "Cash out" → money on its way) that animates in, plus the fact that it's powered by Stripe.
-
-### 5.10 Testimonials made credible
-- **Solution:** Real quotes from eshyft.com, each tagged with **license and state** so readers find someone like them, shown in a CSS marquee that pauses on hover. The verified rating sits right above them.
-- **Next step:** Add photos and tenure ("8 months on ESHYFT"), as Lyft does.
-
-### 5.11 Facility page: pain → fix
-- **Problem:** A2. Facilities had no persuasion on the homepage.
-- **Solution:** Four cards name the pain in the buyer's own words, then resolve it: the 5 a.m. call-out, overtime and agency bills, compliance risk, and "another system to learn". An animated strike-through crosses out each pain.
-
-### 5.12 Agency-cost estimator
-- **Problem:** A8.
-- **Evidence:** Health Affairs: agency staff cost 50–60% more per hour.
-- **Solution:** Two sliders, agency hours per week and agency bill rate. The output is **annual agency spend** and the **estimated premium** over direct-staff cost (55% midpoint, so the premium is spend × 0.55 / 1.55).
-- **What it deliberately doesn't do:** claim "ESHYFT saves you X%". I don't have that data, and B2B buyers spot made-up numbers. The calculator **quantifies the pain**, and the CTA ("Get your real numbers on a call") hands off to sales.
-- **Measure:** `calculator_used`, and consult rate after using the calculator.
-
-### 5.13 Consult form → instant scheduling
-- **Problem:** A7. The contact form is hidden in a modal and isn't role-specific.
-- **Solution:**
-  - A **visible**, two-column section with what you get from the call, a trust badge, and a phone fallback.
-  - **Six fields**, with one-tap chips for "open shifts per month".
-  - On submit, the user **picks a time slot immediately** instead of "someone will reach out". This is the Chili Piper/Calendly pattern that shortens time-to-meeting.
-  - Fields use proper `autocomplete` and labels.
-- **Production note:** POST to the CRM with UTM and calculator context, and route by state or size to the right account executive's calendar.
-- **Measure:** `consult_form_started`, `consult_form_submitted`, and booked-meeting rate.
-
-### 5.14 Objection handling
-- A short **process** section ("15-minute consultation → onboarding and integrations → post shifts, see them fill"). Telling buyers what happens next lowers the perceived cost of the form.
-- **FAQs** for each audience, written only from facts on eshyft.com.
+- **Type:** DM Sans, a free geometric sans close in feel to Airbnb Cereal.
+- **Weights and sizes:** headlines are bold with −3.5% tracking at 40–72 px; body is 16–20 px.
+- **Shape:** fully rounded buttons and pills, 16–24 px card radius, and soft shadows only on floating elements (map, popovers, dialogs).
 
 ---
 
-## 6. Choosing the stack
+## 10. Accessibility
 
-I compared the current options in October 2026 (versions from npm, 2026-10-16):
+- **Contrast:** every text/background pair meets WCAG AA (verified with a script). This includes the brand button, which needed a darker coral than the logo.
+- **The slider** is a native `<input type="range">` with `aria-valuetext="8 shifts a month"`.
+- **Dialogs** use the native `<dialog>` element (focus trap, Escape to close, backdrop).
+- **The location picker:** a labelled dialog with a listbox of cities; Escape or a click outside closes it.
+- **Map pins** are keyboard-focusable with descriptive titles. The decorative "you" marker is hidden from assistive tech.
+- **The FAQ** uses `<details>`/`<summary>`.
+- **Motion:** `prefers-reduced-motion` disables the map fly-to and transitions.
+- Lighthouse accessibility: **100** on mobile and desktop.
 
-| Option | Verdict |
+---
+
+## 11. Performance
+
+| | Live eshyft.com/nurses (mobile) | Redesign (mobile) | Redesign (desktop) |
+|---|---|---|---|
+| Performance | 39 | **97** | **99** |
+| Accessibility | 91 | **100** | **100** |
+| Best practices | 75 | **100** | **100** |
+| SEO | 92 | **100** | **100** |
+| First Contentful Paint | 6.1 s | **1.9 s** | **0.4 s** |
+| Largest Contentful Paint | 24.8 s | **2.3 s** | **1.0 s** |
+| Total Blocking Time | 660 ms | **40 ms** | **0 ms** |
+| Cumulative Layout Shift | 0 | 0.001 | 0.001 |
+| Transfer size | 4,378 KiB | 458 KiB | 319 KiB |
+| Requests | 156 | 49 | 27 |
+
+*Lighthouse 12, 2026-10-16. The redesign was served from a local preview and the live page from production, and the live page carries a CMS, chat widget and analytics a concept doesn't. Treat the comparison as directional.*
+
+**How:**
+- The headline, slider and estimate render from the main bundle (89 KB gzipped), with no network dependency for the number itself.
+- The map and its city data load lazily.
+- Fonts are self-hosted, and there are no raster images apart from map tiles.
+
+---
+
+## 12. How I'd measure it
+
+**Events** (in `src/lib/analytics.ts`, GTM-compatible):
+- `estimate_changed`
+- `location_changed`
+- `estimate_method_opened`
+- `map_home_opened`
+- `get_app_clicked`
+- `store_clicked`
+
+**Primary metric:** app-store click-through per visitor (proxy), then installs attributed through the Branch link.
+
+**First experiments:**
+1. **Estimate vs. no estimate.** Replicate Airbnb's finding for nurses: the current hero against this hero.
+2. **Default shifts:** 4 vs 8 vs 12. Higher numbers attract; lower numbers feel attainable.
+3. **Wage source:** BLS median vs ESHYFT's median posted rate. Does a higher, ESHYFT-specific number lift installs without hurting retention, i.e. do expectations match reality?
+4. **Map:** distance pins vs no labels. Does "134 nursing homes near you" drive the click, or the number alone?
+
+---
+
+## 13. Limitations and next steps
+
+- **Real ESHYFT rates and real open shifts.** The biggest upgrade: pins that are actual shifts with actual rates, as Airbnb's are actual listings.
+- **Geolocation default** instead of Philadelphia.
+- **Spanish version.** A large share of CNAs are bilingual.
+- **Licensed tiles for production.** Esri's public tile endpoint is fine for a demo; production should use a commercial plan (Esri, MapTiler or Google, which Airbnb uses).
+- **Prerendered HTML.** The page is client-rendered; prerendering would make the first paint independent of JavaScript.
+
+---
+
+## 14. Where every number comes from
+
+| On the page | Source |
 |---|---|
-| **Vite 8 + React 19** | ✅ Simplest static build, fast iteration, deploys anywhere |
-| Astro 7 | Best zero-JS ceiling. A strong alternative, but cross-island state (the audience toggle) adds wiring |
-| Next.js 16 | Overkill for one static page |
-| **Tailwind CSS v4** | ✅ CSS-first `@theme` tokens, no config file |
-| shadcn/ui, Magic UI, Aceternity | Good copy-paste sources. I hand-built the handful of components I needed to keep full control of motion and accessibility |
-| **Motion 14** (`motion/react`) | ✅ Layout and presence animations, springs, scroll hooks. Loaded via `LazyMotion` with **async features** (~19 KB gzip off the critical path) |
-| GSAP 3.15 (now free) | Most powerful for pinned or scrubbed timelines, but adding a second engine isn't worth it here |
-| **Lenis** | ✅ ~4 KB smooth scroll. **Disabled under reduced motion** (Lenis doesn't do this itself) |
-| Lottie, Rive, Three.js | Each 100–250 KB+. Rejected: no animation here needs them |
+| Hourly wages, metro names | BLS OEWS, May 2025 (via `scripts/build-dataset.mjs`) |
+| Nursing home locations, beds, star ratings, counts | CMS Nursing Home Provider Information, processed 2026-09-01 |
+| 4.7★ from 3,991 ratings | iTunes Search API, "ESHYFT - Per Diem Nursing", 2026-10-16 |
+| Testimonial quotes and names | eshyft.com/nurses (verbatim) |
+| 30 states | eshyft.com/nurses "Our Locations" |
+| Instant Pay (Stripe), next-day/same-day, weekly pay | eshyft.com/nurses and /eshyft-instant-pay |
+| 24/7 support | eshyft.com/nurses "Why join ESHYFT?" |
+| Joint Commission certification | eshyft.com footer |
+| App store links | ESHYFT's own Branch links from eshyft.com/nurses |
+| Phone mockup content (shift names, balances) | Illustrative; balance figures mirror eshyft.com's Instant Pay artwork |
 
-**Implementation choices worth calling out:**
-- **Design tokens** come from ESHYFT's real brand palette (coral `#EF4651`, sky `#3399FF`, teal `#15BAA2`), placed on a dark "night shift" canvas so the colors read as light sources. The ambient background shifts from coral to blue when you switch audience.
-- **All copy lives in `src/data/content.ts`,** typed, with sourced facts separated from illustrative values.
-- **The CSS marquee duplicates its content** and translates by -50%, so it costs no JavaScript per frame and pauses on hover.
-
----
-
-## 7. Performance & accessibility
-
-**Lighthouse 12, run on 2026-10-16:**
-
-| Metric | Live eshyft.com (mobile) | Redesign: nurse (mobile) | Redesign: facility (mobile) | Redesign (desktop) |
-|---|---|---|---|---|
-| Performance | 39 | 95 | 93 | 100 |
-| Accessibility | 91 | 100 | 100 | 100 |
-| Best practices | 75 | 100 | 100 | 100 |
-| SEO | 92 | 100 | 100 | 100 |
-| LCP | 27.1 s | 2.4 s | 2.9 s | 0.5 s |
-| TBT | 690 ms | 30 ms | 10 ms | 0 ms |
-| CLS | 0 | 0 | 0 | ≤ 0.004 |
-| Transfer size | 5,042 KiB | 247 KiB | 254 KiB | — |
-| Requests | 172 | 7 | 8 | — |
-
-**Caveats (read these):**
-- The redesign was served from a local preview server, and the live site from production. Lighthouse's simulated throttling narrows that gap but doesn't remove it.
-- The live page includes real-world weight a concept doesn't: tag managers, chat widgets, Gravity Forms, a WordPress/Elementor runtime.
-- The fair conclusion: **the architecture and asset choices behind the live page cost a lot**, and a focused rebuild can be an order of magnitude lighter.
-
-**How the redesign got there:**
-- **The LCP element (the H1) is never hidden.** It renders immediately, and only the elements around it animate in. Hiding hero text behind `opacity: 0` is the most common way animated sites ruin their LCP.
-- **The UI is built in code instead of images.** The page has no raster images at all.
-- **Code-splitting:** the facility page and Motion's animation features are lazy chunks.
-- **Self-hosted variable fonts,** loaded only for the scripts the page uses (unicode-range subsets).
-- **Only `transform` and `opacity` are animated,** and continuous loops are pure CSS.
-
-**Accessibility:**
-- **Brand colors fail WCAG AA with white text.** White on coral `#EF4651` is **3.71:1** and white on sky `#3399FF` is **2.94:1**; AA needs 4.5:1. Lighthouse flags exactly these pairs on the live site, including the hero's colored "CNAs / LPNs / RNs" words (teal on white is 2.44:1) and the "I am a CNA, LPN, or RN" button. I added `-strong` shades for filled buttons: coral `#D92F3C` (4.75:1) and sky `#1A6FD6` (4.90:1). The bright brand hues stay for glows and accents.
-- **Reduced motion:** the audience toggle is a proper `radiogroup`. `MotionConfig reducedMotion="user"` covers the animations, a global CSS rule stops the marquees and float loops, and Lenis is turned off.
-- **Screen readers:** animated counters and calculator values expose the **final value** to screen readers via `sr-only` text and a single `aria-live` region, instead of announcing every animation frame. The FAQ uses `aria-expanded`/`aria-controls`.
-- **Keyboard:** there's a skip link, visible `:focus-visible` rings, and labelled form fields with `autocomplete`.
-
----
-
-## 8. Measurement plan
-
-**Events** (in `src/lib/analytics.ts`; GTM-compatible `dataLayer`):
-
-| Event | Funnel step |
-|---|---|
-| `audience_selected` {audience, source} | Segmentation |
-| `cta_clicked` {cta, location, audience} | Intent |
-| `store_badge_clicked` {store, location} | **Nurse conversion (proxy)** |
-| `calculator_used` {calculator} | Engagement |
-| `state_checked` {query, found} | Engagement / expansion signal |
-| `consult_form_started` → `consult_form_submitted` | **Facility conversion** |
-
-**A/B tests I'd run first, in priority order:**
-1. **Audience default.** Nurse-first against a neutral "choose your side" hero. Primary metric: combined conversions per visitor.
-2. **Estimator placement.** Estimator in the hero against below the fold. Metric: store clicks.
-3. **Facility hero proof.** A fill-rate stat (if ESHYFT can publish one, the way Clipboard does) against the Joint Commission badge alone. Metric: consult starts.
-4. **Instant scheduling against "we'll be in touch."** Metric: booked-meeting rate and show rate.
-
----
-
-## 9. Trade-offs and what I'd do next
-
-- **Single page with a toggle, or separate URLs?** I chose a hash-routed toggle for the portfolio's interactivity and instant switching. In production I'd give each side its own **pre-rendered URL** (`/nurses`, `/facilities`) for SEO and ad Quality Score, and keep the toggle as navigation between them.
-- **Data I'd want before shipping:** a real fill-rate or time-to-fill stat, median pay by role and state for the estimator, facility testimonials from administrators and DONs, and logo usage permission.
-- **Client-side rendering:** fine for this page's Lighthouse scores, but I'd pre-render the HTML (Vite SSG or Astro) to make the first paint independent of JavaScript.
-- **Internationalization:** many CNAs are bilingual, so I'd test a Spanish variant of the nurse page.
-- **Referral loop:** Airbnb's most efficient supply lever was referrals (Rachitsky). I'd add a "refer a nurse friend" module once the core funnel is validated.
-
----
-
-## 10. Fact sheet
-
-Every factual claim on the page and where it came from:
-
-| Claim | Source |
-|---|---|
-| Live in 30 states (list of states) | eshyft.com "Our Locations" |
-| "Hundreds of nursing homes" | eshyft.com |
-| Joint Commission certified | eshyft.com footer (Gold Seal) |
-| Instant Pay, powered by Stripe; weekly pay | eshyft.com Instant Pay section |
-| Browse by rate/date/distance; book and accept invites; clock in/out in app | eshyft.com "How ESHYFT works" |
-| Nurse app 4.7★ / 3,991 ratings; manager app 4.7★ / 59 ratings | iTunes Search API, 2026-10-16 |
-| Testimonial quotes | eshyft.com "Nurses ❤️ ESHYFT" (verbatim) |
-| Customer names in the logo marquee | eshyft.com logo strip (shown as text wordmarks) |
-| Technology integrations, ROI calculator, facility manager app | eshyft.com nav and footer |
-| Agency staff cost 50–60% more per hour | Health Affairs 2024, via Skilled Nursing News |
-
-**Labelled as illustrative on the page:**
-- Nurse hourly rates in the estimator
-- The 55% premium midpoint
-- The $216 Instant Pay example
-- Facility names and shift times in the mockups
-
----
-
-## 11. Sources
-
-- YC — [Design Review with Aaron Epstein & Garry Tan](https://www.ycombinator.com/blog/design-review-watch-aaron-and-garry)
-- Michael Seibel — two-sentence test ([Quartz](https://qz.com/africa/795674/how-to-get-into-y-combinator-ceo-michael-seibels-advice-to-nigerian-start-up-founders))
-- NN/g — [Scrolling and Attention](https://www.nngroup.com/articles/scrolling-and-attention/) · [F-Shaped Pattern](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/) · [Trustworthy Design](https://www.nngroup.com/articles/trustworthy-design/)
-- Unbounce Conversion Benchmark (via [MarketingProfs](https://marketingprofs.com/charts/2024/52374/landing-page-conversion-benchmarks))
-- Deloitte & Google — [Milliseconds Make Millions](https://web.dev/case-studies/milliseconds-make-millions) · [Vodafone LCP case study](https://web.dev/case-studies/vodafone)
-- Lenny Rachitsky — [28 ways to grow supply in a marketplace](https://andrewchen.com/grow-marketplace-supply/) · [How to kickstart and scale a marketplace](https://www.lennysnewsletter.com/p/how-to-kickstart-and-scale-a-marketplace)
-- Andrew Chen — [Solve a hard problem (The Cold Start Problem)](https://andrewchen.com/solve-a-hard-problem-cold-start-problem/)
-- NFX — [19 Tactics to Solve the Chicken-or-Egg Problem](https://www.nfx.com/post/19-marketplace-tactics-for-overcoming-the-chicken-or-egg-problem)
-- Skilled Nursing News — [Agency staffing in nursing homes, 2022](https://skillednursingnews.com/2024/02/states-where-nursing-homes-used-the-most-agency-nursing-staff-in-2022/)
-- The Joint Commission — [Health Care Staffing Services Certification](https://jointcommission.org/resources/news-and-multimedia/fact-sheets/facts-about-health-care-staffing-services-certification)
-- Marketplace pages: [Airbnb Host](https://www.airbnb.com/host/homes) · [Uber Drive](https://www.uber.com/us/en/drive/) · [Lyft Driver](https://www.lyft.com/driver) · [DoorDash Dasher](https://dasher.doordash.com/en-us) · [Clipboard](https://www.clipboard.com/) · [Nursa](https://nursa.com/) · [CareRev](https://www.carerev.com/) · [ShiftKey](https://www.shiftkey.com/) · [IntelyCare](https://www.intelycare.com/) · [ShiftMed](https://www.shiftmed.com/)
-- Libraries — [Motion: reduce bundle size](https://motion.dev/docs/react-reduce-bundle-size) · [Tailwind v4 upgrade guide](https://tailwindcss.com/docs/upgrade-guide) · [GSAP is now free](https://webflow.com/blog/gsap-becomes-free) · [Lenis](https://github.com/darkroomengineering/lenis)
+**Sources**
+- Airbnb host page: https://www.airbnb.com/host/homes
+- Lenny Rachitsky, "28 ways to grow supply in a marketplace": https://andrewchen.com/grow-marketplace-supply/
+- Andrew Chen, *The Cold Start Problem*: https://andrewchen.com/solve-a-hard-problem-cold-start-problem/
+- Nielsen Norman Group, Trustworthy Design: https://www.nngroup.com/articles/trustworthy-design/
+- Deloitte & Google, "Milliseconds Make Millions": https://web.dev/case-studies/milliseconds-make-millions
+- BLS OEWS: https://www.bls.gov/oes/
+- CMS Nursing Home Provider Information: https://data.cms.gov/provider-data/dataset/4pq5-n9py
 
 ---
 
 ### More screenshots
 
-| Earnings estimator | Agency-cost estimator |
+| Location picker | Nursing home card (Pittsburgh, RN) |
 |---|---|
-| ![Nurse earnings estimator](screenshots/nurse-estimator.png) | ![Facility agency cost estimator](screenshots/facility-calculator.png) |
+| ![Location picker](screenshots/location-picker.png) | ![Map card](screenshots/map-card-pittsburgh.png) |
 
-| Consultation form | Mobile (nurse) | Mobile (facility) |
-|---|---|---|
-| ![Consultation form](screenshots/facility-consult.png) | ![Mobile nurse view](screenshots/mobile-nurse.png) | ![Mobile facility view](screenshots/mobile-facility.png) |
+| How we estimate | Mobile |
+|---|---|
+| ![Estimate method dialog](screenshots/estimate-method.png) | ![Mobile hero](screenshots/mobile-hero.png) |
+
+| Three reasons | Testimonials |
+|---|---|
+| ![Why ESHYFT](screenshots/section-why.png) | ![Testimonials](screenshots/section-testimonials.png) |
+
+| Backed by ESHYFT | In the app |
+|---|---|
+| ![Backed by ESHYFT](screenshots/section-backed-by.png) | ![App showcase](screenshots/section-app.png) |

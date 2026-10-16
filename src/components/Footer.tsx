@@ -1,50 +1,45 @@
-import { ShieldCheck } from 'lucide-react'
 import type { ReactNode } from 'react'
-import type { Audience } from '../data/content'
-import { Logo } from './Logo'
+import { links } from '../data/content'
+import { meta } from '../lib/estimate'
 
-export function Footer({ onAudience }: { onAudience: (a: Audience) => void }) {
+export function Footer() {
   return (
-    <footer className="border-t border-line pt-16 pb-28 md:pb-16">
-      <div className="container-x grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
-          <Logo />
-          <p className="mt-4 max-w-xs text-sm text-mute">
-            Connecting CNAs, LPNs and RNs with per diem shifts at long-term care facilities.
-          </p>
-          <p className="mt-4 inline-flex items-center gap-2 text-sm text-white">
-            <ShieldCheck className="size-4 text-teal" aria-hidden /> Joint Commission certified
+    <footer className="border-t border-hairline bg-mist pb-28 sm:pb-0">
+      <div className="container-page">
+        <div className="grid gap-10 py-12 sm:grid-cols-3">
+          <Col title="Nurses">
+            <a href={links.instantPay}>Instant Pay</a>
+            <a href={links.help}>Help center</a>
+            <a href="https://eshyft.com/faq/">FAQs</a>
+          </Col>
+          <Col title="Facilities">
+            <a href={links.facilities}>ESHYFT for facilities</a>
+            <a href="https://eshyft.com/roi-calculator/">ROI calculator</a>
+            <a href={links.signIn}>Facility manager sign in</a>
+          </Col>
+          <Col title="ESHYFT">
+            <a href="https://eshyft.com/about-us/">About</a>
+            <a href="https://eshyft.com/careers/">Careers</a>
+            <a href={links.phone}>1-800-949-5188</a>
+          </Col>
+        </div>
+        <div className="space-y-2 border-t border-hairline py-6 text-sm text-ink-2">
+          <p>Concept redesign of eshyft.com/nurses by Joseph Fan. Not an official ESHYFT page.</p>
+          <p>
+            Wages: {meta.wages.source}, {meta.wages.reference}. Nursing homes: {meta.nursingHomes.source} (
+            {meta.nursingHomes.processingDate}); not all are ESHYFT partners. Map data © OpenStreetMap contributors.
           </p>
         </div>
-        <FooterCol title="Nurses">
-          <button onClick={() => onAudience('nurses')} className="text-left hover:text-white">For CNAs & nurses</button>
-          <a href="https://eshyft.com/eshyft-instant-pay/" className="hover:text-white">Instant Pay</a>
-        </FooterCol>
-        <FooterCol title="Facilities">
-          <button onClick={() => onAudience('facilities')} className="text-left hover:text-white">For nursing homes</button>
-          <a href="https://eshyft.com/" className="hover:text-white">Technology integrations</a>
-        </FooterCol>
-        <FooterCol title="Company">
-          <a href="https://eshyft.com/" className="hover:text-white">About</a>
-          <a href="https://eshyft.com/" className="hover:text-white">Careers</a>
-          <a href="tel:18009495188" className="hover:text-white">1-800-949-5188</a>
-        </FooterCol>
-      </div>
-      <div className="container-x mt-12 flex flex-col gap-2 border-t border-line pt-6 text-xs text-mute sm:flex-row sm:justify-between">
-        <p>
-          Concept redesign by Joseph Fan for portfolio purposes. Not the official ESHYFT website.
-        </p>
-        <p>Pay figures shown are illustrative estimates, not offers.</p>
       </div>
     </footer>
   )
 }
 
-function FooterCol({ title, children }: { title: string; children: ReactNode }) {
+function Col({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <p className="text-sm font-semibold text-white">{title}</p>
-      <div className="mt-4 flex flex-col gap-3 text-sm text-mute">{children}</div>
+      <p className="text-sm font-bold">{title}</p>
+      <div className="mt-4 flex flex-col gap-3 text-sm [&_a:hover]:underline">{children}</div>
     </div>
   )
 }

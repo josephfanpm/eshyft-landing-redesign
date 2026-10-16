@@ -1,0 +1,801 @@
+{
+ "meta": {
+  "generatedAt": "2026-10-16",
+  "radiusMiles": 15,
+  "wages": {
+   "source": "U.S. Bureau of Labor Statistics, OEWS",
+   "reference": "May 2025",
+   "statistic": "median hourly wage, metro area"
+  },
+  "nursingHomes": {
+   "source": "CMS Nursing Home Provider Information",
+   "processingDate": "2026-09-01"
+  }
+ },
+ "cities": [
+  {
+   "slug": "albany-ny",
+   "city": "Albany",
+   "state": "NY",
+   "lat": 42.6526,
+   "lon": -73.7562,
+   "metro": "Albany metro",
+   "wages": {
+    "CNA": 19.31,
+    "LPN": 29.88,
+    "RN": 48.06
+   },
+   "nursingHomes": 22
+  },
+  {
+   "slug": "allentown-pa",
+   "city": "Allentown",
+   "state": "PA",
+   "lat": 40.6084,
+   "lon": -75.4902,
+   "metro": "Lehigh Valley",
+   "wages": {
+    "CNA": 21.33,
+    "LPN": 30.79,
+    "RN": 48.77
+   },
+   "nursingHomes": 31
+  },
+  {
+   "slug": "atlanta-ga",
+   "city": "Atlanta",
+   "state": "GA",
+   "lat": 33.749,
+   "lon": -84.388,
+   "metro": "Atlanta metro",
+   "wages": {
+    "CNA": 18.92,
+    "LPN": 31.28,
+    "RN": 48.31
+   },
+   "nursingHomes": 41
+  },
+  {
+   "slug": "baltimore-md",
+   "city": "Baltimore",
+   "state": "MD",
+   "lat": 39.2904,
+   "lon": -76.6122,
+   "metro": "Baltimore metro",
+   "wages": {
+    "CNA": 20.56,
+    "LPN": 35.99,
+    "RN": 47.86
+   },
+   "nursingHomes": 77
+  },
+  {
+   "slug": "birmingham-al",
+   "city": "Birmingham",
+   "state": "AL",
+   "lat": 33.5186,
+   "lon": -86.8104,
+   "metro": "Birmingham metro",
+   "wages": {
+    "CNA": 17.05,
+    "LPN": 29.35,
+    "RN": 37.83
+   },
+   "nursingHomes": 33
+  },
+  {
+   "slug": "boston-ma",
+   "city": "Boston",
+   "state": "MA",
+   "lat": 42.3601,
+   "lon": -71.0589,
+   "metro": "Boston metro",
+   "wages": {
+    "CNA": 22.88,
+    "LPN": 39.52,
+    "RN": 51.05
+   },
+   "nursingHomes": 98
+  },
+  {
+   "slug": "buffalo-ny",
+   "city": "Buffalo",
+   "state": "NY",
+   "lat": 42.8864,
+   "lon": -78.8784,
+   "metro": "Buffalo metro",
+   "wages": {
+    "CNA": 19.13,
+    "LPN": 30.47,
+    "RN": 47.63
+   },
+   "nursingHomes": 32
+  },
+  {
+   "slug": "burlington-vt",
+   "city": "Burlington",
+   "state": "VT",
+   "lat": 44.4759,
+   "lon": -73.2121,
+   "metro": "Burlington metro",
+   "wages": {
+    "CNA": 23.17,
+    "LPN": 36.5,
+    "RN": 47.28
+   },
+   "nursingHomes": 4
+  },
+  {
+   "slug": "camden-nj",
+   "city": "Camden",
+   "state": "NJ",
+   "lat": 39.9259,
+   "lon": -75.1196,
+   "metro": "Philadelphia metro",
+   "wages": {
+    "CNA": 22.22,
+    "LPN": 34,
+    "RN": 48.64
+   },
+   "nursingHomes": 122
+  },
+  {
+   "slug": "charleston-sc",
+   "city": "Charleston",
+   "state": "SC",
+   "lat": 32.7765,
+   "lon": -79.9311,
+   "metro": "Charleston metro",
+   "wages": {
+    "CNA": 18.66,
+    "LPN": 30.82,
+    "RN": 44.62
+   },
+   "nursingHomes": 11
+  },
+  {
+   "slug": "charleston-wv",
+   "city": "Charleston",
+   "state": "WV",
+   "lat": 38.3498,
+   "lon": -81.6326,
+   "metro": "Charleston metro",
+   "wages": {
+    "CNA": 17.43,
+    "LPN": 26.14,
+    "RN": 38.57
+   },
+   "nursingHomes": 10
+  },
+  {
+   "slug": "charlotte-nc",
+   "city": "Charlotte",
+   "state": "NC",
+   "lat": 35.2271,
+   "lon": -80.8431,
+   "metro": "Charlotte metro",
+   "wages": {
+    "CNA": 18.96,
+    "LPN": 31.32,
+    "RN": 43.57
+   },
+   "nursingHomes": 31
+  },
+  {
+   "slug": "chicago-il",
+   "city": "Chicago",
+   "state": "IL",
+   "lat": 41.8781,
+   "lon": -87.6298,
+   "metro": "Chicago metro",
+   "wages": {
+    "CNA": 22.57,
+    "LPN": 37.54,
+    "RN": 48.31
+   },
+   "nursingHomes": 133
+  },
+  {
+   "slug": "cincinnati-oh",
+   "city": "Cincinnati",
+   "state": "OH",
+   "lat": 39.1031,
+   "lon": -84.512,
+   "metro": "Cincinnati metro",
+   "wages": {
+    "CNA": 19.4,
+    "LPN": 30.85,
+    "RN": 40.22
+   },
+   "nursingHomes": 90
+  },
+  {
+   "slug": "cleveland-oh",
+   "city": "Cleveland",
+   "state": "OH",
+   "lat": 41.4993,
+   "lon": -81.6944,
+   "metro": "Cleveland metro",
+   "wages": {
+    "CNA": 18.76,
+    "LPN": 30.72,
+    "RN": 40.36
+   },
+   "nursingHomes": 92
+  },
+  {
+   "slug": "columbia-sc",
+   "city": "Columbia",
+   "state": "SC",
+   "lat": 34.0007,
+   "lon": -81.0348,
+   "metro": "Columbia metro",
+   "wages": {
+    "CNA": 17.98,
+    "LPN": 29.86,
+    "RN": 39.39
+   },
+   "nursingHomes": 20
+  },
+  {
+   "slug": "columbus-oh",
+   "city": "Columbus",
+   "state": "OH",
+   "lat": 39.9612,
+   "lon": -82.9988,
+   "metro": "Columbus metro",
+   "wages": {
+    "CNA": 20.66,
+    "LPN": 29.76,
+    "RN": 40.34
+   },
+   "nursingHomes": 62
+  },
+  {
+   "slug": "des-moines-ia",
+   "city": "Des Moines",
+   "state": "IA",
+   "lat": 41.5868,
+   "lon": -93.625,
+   "metro": "Des Moines metro",
+   "wages": {
+    "CNA": 21.13,
+    "LPN": 30.61,
+    "RN": 37.8
+   },
+   "nursingHomes": 36
+  },
+  {
+   "slug": "detroit-mi",
+   "city": "Detroit",
+   "state": "MI",
+   "lat": 42.3314,
+   "lon": -83.0458,
+   "metro": "Detroit metro",
+   "wages": {
+    "CNA": 19.18,
+    "LPN": 33.32,
+    "RN": 46.77
+   },
+   "nursingHomes": 58
+  },
+  {
+   "slug": "dover-de",
+   "city": "Dover",
+   "state": "DE",
+   "lat": 39.1582,
+   "lon": -75.5244,
+   "metro": "Dover metro",
+   "wages": {
+    "CNA": 19.04,
+    "LPN": 29.88,
+    "RN": 44.05
+   },
+   "nursingHomes": 7
+  },
+  {
+   "slug": "grand-rapids-mi",
+   "city": "Grand Rapids",
+   "state": "MI",
+   "lat": 42.9634,
+   "lon": -85.6681,
+   "metro": "Grand Rapids metro",
+   "wages": {
+    "CNA": 18.43,
+    "LPN": 31.36,
+    "RN": 40.35
+   },
+   "nursingHomes": 29
+  },
+  {
+   "slug": "greenville-sc",
+   "city": "Greenville",
+   "state": "SC",
+   "lat": 34.8526,
+   "lon": -82.394,
+   "metro": "Greenville metro",
+   "wages": {
+    "CNA": 17.9,
+    "LPN": 29.79,
+    "RN": 39.14
+   },
+   "nursingHomes": 20
+  },
+  {
+   "slug": "harrisburg-pa",
+   "city": "Harrisburg",
+   "state": "PA",
+   "lat": 40.2732,
+   "lon": -76.8867,
+   "metro": "Harrisburg metro",
+   "wages": {
+    "CNA": 21.12,
+    "LPN": 30.13,
+    "RN": 46.52
+   },
+   "nursingHomes": 16
+  },
+  {
+   "slug": "hartford-ct",
+   "city": "Hartford",
+   "state": "CT",
+   "lat": 41.7658,
+   "lon": -72.6734,
+   "metro": "Hartford metro",
+   "wages": {
+    "CNA": 21.32,
+    "LPN": 35,
+    "RN": 48.78
+   },
+   "nursingHomes": 55
+  },
+  {
+   "slug": "indianapolis-in",
+   "city": "Indianapolis",
+   "state": "IN",
+   "lat": 39.7684,
+   "lon": -86.1581,
+   "metro": "Indianapolis metro",
+   "wages": {
+    "CNA": 18.69,
+    "LPN": 32.31,
+    "RN": 40.5
+   },
+   "nursingHomes": 69
+  },
+  {
+   "slug": "jacksonville-fl",
+   "city": "Jacksonville",
+   "state": "FL",
+   "lat": 30.3322,
+   "lon": -81.6557,
+   "metro": "Jacksonville metro",
+   "wages": {
+    "CNA": 18.15,
+    "LPN": 29.84,
+    "RN": 40.15
+   },
+   "nursingHomes": 40
+  },
+  {
+   "slug": "kansas-city-mo",
+   "city": "Kansas City",
+   "state": "MO",
+   "lat": 39.0997,
+   "lon": -94.5786,
+   "metro": "Kansas City metro",
+   "wages": {
+    "CNA": 19.09,
+    "LPN": 30.97,
+    "RN": 39.92
+   },
+   "nursingHomes": 69
+  },
+  {
+   "slug": "knoxville-tn",
+   "city": "Knoxville",
+   "state": "TN",
+   "lat": 35.9606,
+   "lon": -83.9207,
+   "metro": "Knoxville metro",
+   "wages": {
+    "CNA": 18.27,
+    "LPN": 27.86,
+    "RN": 37.13
+   },
+   "nursingHomes": 17
+  },
+  {
+   "slug": "lancaster-pa",
+   "city": "Lancaster",
+   "state": "PA",
+   "lat": 40.0379,
+   "lon": -76.3055,
+   "metro": "Lancaster metro",
+   "wages": {
+    "CNA": 21.58,
+    "LPN": 30.43,
+    "RN": 43.09
+   },
+   "nursingHomes": 25
+  },
+  {
+   "slug": "little-rock-ar",
+   "city": "Little Rock",
+   "state": "AR",
+   "lat": 34.7465,
+   "lon": -92.2896,
+   "metro": "Little Rock metro",
+   "wages": {
+    "CNA": 17,
+    "LPN": 28.48,
+    "RN": 38.98
+   },
+   "nursingHomes": 24
+  },
+  {
+   "slug": "louisville-ky",
+   "city": "Louisville",
+   "state": "KY",
+   "lat": 38.2527,
+   "lon": -85.7585,
+   "metro": "Louisville metro",
+   "wages": {
+    "CNA": 20.3,
+    "LPN": 30.99,
+    "RN": 40.79
+   },
+   "nursingHomes": 53
+  },
+  {
+   "slug": "memphis-tn",
+   "city": "Memphis",
+   "state": "TN",
+   "lat": 35.1495,
+   "lon": -90.049,
+   "metro": "Memphis metro",
+   "wages": {
+    "CNA": 18.27,
+    "LPN": 28.43,
+    "RN": 39.18
+   },
+   "nursingHomes": 22
+  },
+  {
+   "slug": "miami-fl",
+   "city": "Miami",
+   "state": "FL",
+   "lat": 25.7617,
+   "lon": -80.1918,
+   "metro": "Miami metro",
+   "wages": {
+    "CNA": 18.28,
+    "LPN": 30.1,
+    "RN": 43.93
+   },
+   "nursingHomes": 48
+  },
+  {
+   "slug": "milwaukee-wi",
+   "city": "Milwaukee",
+   "state": "WI",
+   "lat": 43.0389,
+   "lon": -87.9065,
+   "metro": "Milwaukee metro",
+   "wages": {
+    "CNA": 21.97,
+    "LPN": 31.45,
+    "RN": 46.81
+   },
+   "nursingHomes": 40
+  },
+  {
+   "slug": "minneapolis-mn",
+   "city": "Minneapolis",
+   "state": "MN",
+   "lat": 44.9778,
+   "lon": -93.265,
+   "metro": "Minneapolis–St. Paul metro",
+   "wages": {
+    "CNA": 23.09,
+    "LPN": 31.57,
+    "RN": 49.54
+   },
+   "nursingHomes": 87
+  },
+  {
+   "slug": "nashville-tn",
+   "city": "Nashville",
+   "state": "TN",
+   "lat": 36.1627,
+   "lon": -86.7816,
+   "metro": "Nashville metro",
+   "wages": {
+    "CNA": 18.99,
+    "LPN": 29.78,
+    "RN": 40.4
+   },
+   "nursingHomes": 21
+  },
+  {
+   "slug": "new-haven-ct",
+   "city": "New Haven",
+   "state": "CT",
+   "lat": 41.3083,
+   "lon": -72.9279,
+   "metro": "New Haven metro",
+   "wages": {
+    "CNA": 21.65,
+    "LPN": 35.49,
+    "RN": 50.24
+   },
+   "nursingHomes": 38
+  },
+  {
+   "slug": "new-york-ny",
+   "city": "New York",
+   "state": "NY",
+   "lat": 40.7128,
+   "lon": -74.006,
+   "metro": "New York metro",
+   "wages": {
+    "CNA": 23.69,
+    "LPN": 36.5,
+    "RN": 57.56
+   },
+   "nursingHomes": 213
+  },
+  {
+   "slug": "newark-nj",
+   "city": "Newark",
+   "state": "NJ",
+   "lat": 40.7357,
+   "lon": -74.1724,
+   "metro": "New York metro",
+   "wages": {
+    "CNA": 23.69,
+    "LPN": 36.5,
+    "RN": 57.56
+   },
+   "nursingHomes": 163
+  },
+  {
+   "slug": "omaha-ne",
+   "city": "Omaha",
+   "state": "NE",
+   "lat": 41.2565,
+   "lon": -95.9345,
+   "metro": "Omaha metro",
+   "wages": {
+    "CNA": 19.24,
+    "LPN": 30.55,
+    "RN": 40.67
+   },
+   "nursingHomes": 30
+  },
+  {
+   "slug": "orlando-fl",
+   "city": "Orlando",
+   "state": "FL",
+   "lat": 28.5384,
+   "lon": -81.3789,
+   "metro": "Orlando metro",
+   "wages": {
+    "CNA": 18.12,
+    "LPN": 29.34,
+    "RN": 40.17
+   },
+   "nursingHomes": 44
+  },
+  {
+   "slug": "philadelphia-pa",
+   "city": "Philadelphia",
+   "state": "PA",
+   "lat": 39.9526,
+   "lon": -75.1652,
+   "metro": "Philadelphia metro",
+   "wages": {
+    "CNA": 22.22,
+    "LPN": 34,
+    "RN": 48.64
+   },
+   "nursingHomes": 134
+  },
+  {
+   "slug": "pittsburgh-pa",
+   "city": "Pittsburgh",
+   "state": "PA",
+   "lat": 40.4406,
+   "lon": -79.9959,
+   "metro": "Pittsburgh metro",
+   "wages": {
+    "CNA": 20.71,
+    "LPN": 30.32,
+    "RN": 39.6
+   },
+   "nursingHomes": 54
+  },
+  {
+   "slug": "portland-me",
+   "city": "Portland",
+   "state": "ME",
+   "lat": 43.6591,
+   "lon": -70.2568,
+   "metro": "Portland metro",
+   "wages": {
+    "CNA": 23.17,
+    "LPN": 36.51,
+    "RN": 42.53
+   },
+   "nursingHomes": 17
+  },
+  {
+   "slug": "providence-ri",
+   "city": "Providence",
+   "state": "RI",
+   "lat": 41.824,
+   "lon": -71.4128,
+   "metro": "Providence metro",
+   "wages": {
+    "CNA": 22.27,
+    "LPN": 37.98,
+    "RN": 48.02
+   },
+   "nursingHomes": 60
+  },
+  {
+   "slug": "raleigh-nc",
+   "city": "Raleigh",
+   "state": "NC",
+   "lat": 35.7796,
+   "lon": -78.6382,
+   "metro": "Raleigh metro",
+   "wages": {
+    "CNA": 19.09,
+    "LPN": 30.81,
+    "RN": 40.78
+   },
+   "nursingHomes": 20
+  },
+  {
+   "slug": "richmond-va",
+   "city": "Richmond",
+   "state": "VA",
+   "lat": 37.5407,
+   "lon": -77.436,
+   "metro": "Richmond metro",
+   "wages": {
+    "CNA": 20.54,
+    "LPN": 30.78,
+    "RN": 44.99
+   },
+   "nursingHomes": 29
+  },
+  {
+   "slug": "rochester-ny",
+   "city": "Rochester",
+   "state": "NY",
+   "lat": 43.1566,
+   "lon": -77.6088,
+   "metro": "Rochester metro",
+   "wages": {
+    "CNA": 19.26,
+    "LPN": 29.84,
+    "RN": 41.62
+   },
+   "nursingHomes": 31
+  },
+  {
+   "slug": "scranton-pa",
+   "city": "Scranton",
+   "state": "PA",
+   "lat": 41.409,
+   "lon": -75.6624,
+   "metro": "Scranton–Wilkes-Barre metro",
+   "wages": {
+    "CNA": 21.14,
+    "LPN": 29.68,
+    "RN": 39.73
+   },
+   "nursingHomes": 20
+  },
+  {
+   "slug": "st-louis-mo",
+   "city": "St. Louis",
+   "state": "MO",
+   "lat": 38.627,
+   "lon": -90.1994,
+   "metro": "St. Louis metro",
+   "wages": {
+    "CNA": 18.81,
+    "LPN": 31.31,
+    "RN": 39.99
+   },
+   "nursingHomes": 74
+  },
+  {
+   "slug": "tampa-fl",
+   "city": "Tampa",
+   "state": "FL",
+   "lat": 27.9506,
+   "lon": -82.4572,
+   "metro": "Tampa Bay metro",
+   "wages": {
+    "CNA": 18.02,
+    "LPN": 30.04,
+    "RN": 41.09
+   },
+   "nursingHomes": 31
+  },
+  {
+   "slug": "trenton-nj",
+   "city": "Trenton",
+   "state": "NJ",
+   "lat": 40.2171,
+   "lon": -74.7429,
+   "metro": "Trenton metro",
+   "wages": {
+    "CNA": 22.1,
+    "LPN": 36.24,
+    "RN": 48.07
+   },
+   "nursingHomes": 36
+  },
+  {
+   "slug": "virginia-beach-va",
+   "city": "Virginia Beach",
+   "state": "VA",
+   "lat": 36.8529,
+   "lon": -75.978,
+   "metro": "Hampton Roads",
+   "wages": {
+    "CNA": 18.75,
+    "LPN": 30.95,
+    "RN": 43
+   },
+   "nursingHomes": 18
+  },
+  {
+   "slug": "wichita-ks",
+   "city": "Wichita",
+   "state": "KS",
+   "lat": 37.6872,
+   "lon": -97.3301,
+   "metro": "Wichita metro",
+   "wages": {
+    "CNA": 17.93,
+    "LPN": 28.99,
+    "RN": 36.8
+   },
+   "nursingHomes": 29
+  },
+  {
+   "slug": "wilmington-de",
+   "city": "Wilmington",
+   "state": "DE",
+   "lat": 39.7391,
+   "lon": -75.5398,
+   "metro": "Philadelphia metro",
+   "wages": {
+    "CNA": 22.22,
+    "LPN": 34,
+    "RN": 48.64
+   },
+   "nursingHomes": 42
+  },
+  {
+   "slug": "worcester-ma",
+   "city": "Worcester",
+   "state": "MA",
+   "lat": 42.2626,
+   "lon": -71.8023,
+   "metro": "Worcester metro",
+   "wages": {
+    "CNA": 21.98,
+    "LPN": 38.01,
+    "RN": 48.19
+   },
+   "nursingHomes": 35
+  }
+ ]
+}

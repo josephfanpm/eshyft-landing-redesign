@@ -1,119 +1,164 @@
 @import "tailwindcss";
-@import "lenis/dist/lenis.css";
 
 /*
- * Design tokens. Brand hues come from eshyft.com (coral #EF4651, sky #3399FF, teal #15BAA2),
- * placed on a dark "night shift" canvas so the brand colors read as light sources.
+ * Tokens follow the Airbnb host page's system: near-black text, one gray for
+ * secondary copy, hairline borders, a light gray for alternating sections, and a
+ * single brand accent. Here the accent is ESHYFT's logo coral.
  */
 @theme {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque Variable", "Inter Variable", ui-sans-serif, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --color-ink: #0b1220;
-  --color-ink-2: #111a2e;
-  --color-ink-3: #1a2540;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-mute: #93a0b8;
+  --color-ink: #222222;
+  --color-ink-2: #6a6a6a;
+  --color-hairline: #dddddd;
+  --color-mist: #f7f7f7;
+  --color-sand: #f2efe9;
 
+  /* Coral is the logo color. "coral-ink" is the darker shade used wherever white
+     text sits on it, because white on #EF4651 fails WCAG AA (3.7:1). */
   --color-coral: #ef4651;
-  --color-coral-soft: #ff7a83;
-  /* "-strong" shades pass WCAG AA (4.5:1+) with white text; the raw brand hues don't. */
-  --color-coral-strong: #d92f3c;
-  --color-sky: #3399ff;
-  --color-sky-strong: #1a6fd6;
-  --color-sky-soft: #7cc0ff;
-  --color-teal: #15baa2;
-  --color-teal-soft: #5fe3cf;
-
-  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-blob: blob 18s ease-in-out infinite;
-
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes blob {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(6%, -8%) scale(1.08); }
-    66% { transform: translate(-5%, 6%) scale(0.95); }
-  }
+  --color-coral-ink: #d42a37;
+  --color-blue: #3399ff;
+  --color-blue-ink: #1a6fd6;
+  --color-success: #008a05;
 }
 
 @layer base {
   html {
-    color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-ink font-sans text-slate-200 antialiased;
+    @apply bg-white font-sans text-ink antialiased;
   }
   h1, h2, h3 {
-    @apply font-display text-white;
-    letter-spacing: -0.025em;
     text-wrap: balance;
   }
-  p { text-wrap: pretty; }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-sky-soft;
-  }
-  ::selection {
-    @apply bg-coral/40 text-white;
+    @apply rounded-sm outline-2 outline-offset-2 outline-ink;
   }
 }
 
-/* Declared as a utility (not a component class) so other classes can @apply it in Tailwind v4. */
+@utility container-page {
+  @apply mx-auto w-full max-w-[1280px] px-6 sm:px-10 lg:px-20;
+}
+
+@utility display {
+  /* Big, tight, heavy — the Airbnb host page's signature type treatment. */
+  @apply font-bold tracking-[-0.035em];
+  line-height: 1.04;
+}
+
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-[transform,background-color,box-shadow,color] duration-200 active:scale-[0.98];
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-base font-semibold transition-[background-color,transform,box-shadow] duration-150 active:scale-[0.97];
 }
 
-@layer components {
-  .container-x {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
-  }
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs font-medium tracking-wide text-mute uppercase;
-  }
-  .card {
-    @apply rounded-3xl border border-line bg-white/[0.03];
-  }
-  .btn-primary {
-    @apply btn bg-coral-strong text-white shadow-[0_8px_30px_-8px_var(--color-coral)] hover:bg-coral-strong/85;
-  }
-  .btn-ghost {
-    @apply btn border border-line bg-white/[0.04] text-white hover:bg-white/[0.08];
-  }
-  .field {
-    @apply w-full rounded-xl border border-line bg-ink-2 px-4 py-3 text-sm text-white placeholder:text-mute/70 focus:border-sky focus:outline-hidden;
-  }
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(100deg, var(--color-coral-soft), var(--color-sky-soft) 55%, var(--color-teal-soft));
+@utility btn-brand {
+  @apply btn text-white;
+  background: linear-gradient(90deg, #dc3542 0%, #c8233a 100%);
+  &:hover {
+    background: #c8233a;
   }
 }
 
-/* Range inputs for the calculators. --fill is set inline from the current value. */
-input[type="range"] {
-  @apply h-2 w-full cursor-pointer appearance-none rounded-full bg-ink-3;
-  background-image: linear-gradient(90deg, var(--color-sky), var(--color-teal));
-  background-size: var(--fill, 50%) 100%;
-  background-repeat: no-repeat;
+@utility btn-dark {
+  @apply btn bg-ink text-white hover:bg-black;
 }
-input[type="range"]::-webkit-slider-thumb {
-  @apply size-5 appearance-none rounded-full border-4 border-white bg-ink shadow-lg;
+
+/* ---------- Range slider (the earnings slider) ---------- */
+.earnings-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 32px;
+  background: transparent;
+  cursor: pointer;
 }
-input[type="range"]::-moz-range-thumb {
-  @apply size-4 rounded-full border-4 border-white bg-ink shadow-lg;
+.earnings-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-coral) var(--fill), var(--color-hairline) var(--fill));
+}
+.earnings-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-coral) var(--fill), var(--color-hairline) var(--fill));
+}
+.earnings-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 36px;
+  height: 36px;
+  margin-top: -16px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.18);
+  transition: transform 150ms;
+}
+.earnings-range::-moz-range-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.18);
+}
+.earnings-range:active::-webkit-slider-thumb {
+  transform: scale(1.08);
+}
+.earnings-range:focus-visible {
+  outline: none;
+}
+.earnings-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-ink);
+}
+
+/* ---------- Map markers & popups ---------- */
+/* Airbnb-style price pills, centred on their point (the Leaflet icon box is 0×0). */
+.home-pill {
+  @apply absolute top-0 left-0 cursor-pointer rounded-full border border-black/10 bg-white px-2.5 py-1 text-[13px] font-bold whitespace-nowrap text-ink shadow-[0_2px_4px_rgb(0_0_0/0.18)] transition-[transform,background-color,color] duration-150;
+  transform: translate(-50%, -50%);
+}
+.leaflet-marker-icon:hover {
+  z-index: 900 !important;
+}
+.leaflet-marker-icon:hover .home-pill,
+.leaflet-marker-icon:focus-visible .home-pill {
+  @apply bg-ink text-white;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.you-marker {
+  @apply grid size-12 place-items-center rounded-full bg-coral shadow-[0_2px_6px_rgb(0_0_0/0.25)];
+}
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-mist);
+}
+.leaflet-popup-content-wrapper {
+  @apply rounded-xl shadow-[0_6px_20px_rgb(0_0_0/0.2)];
+}
+.leaflet-popup-content {
+  @apply m-0 py-4 pr-10 pl-[18px] text-ink;
+  min-width: 220px;
+}
+.leaflet-popup-content p {
+  margin: 0;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  @apply top-2 right-2 grid size-7 place-items-center rounded-full text-lg text-ink hover:bg-mist;
+}
+.leaflet-control-attribution {
+  @apply text-[10px]! leading-tight;
+}
+.leaflet-bar {
+  @apply overflow-hidden rounded-lg! border-0! shadow-[0_2px_4px_rgb(0_0_0/0.18)]!;
+}
+.leaflet-bar a {
+  @apply text-ink!;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
+    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
   }
 }

@@ -1,18 +1,14 @@
 /**
- * Funnel instrumentation stub. A landing page redesign is only as good as the
- * measurement behind it, so every conversion-relevant interaction emits an event.
- *
- * In production this would forward to GA4 / Segment / Mixpanel. Here it pushes to
- * window.dataLayer (GTM-compatible) and logs in development.
+ * Funnel events for the nurse page. Pushes to a GTM-compatible dataLayer;
+ * logs in development. Swap for Segment/GA4/Mixpanel in production.
  */
 export type FunnelEvent =
-  | 'audience_selected'
-  | 'cta_clicked'
-  | 'store_badge_clicked'
-  | 'calculator_used'
-  | 'state_checked'
-  | 'consult_form_started'
-  | 'consult_form_submitted'
+  | 'estimate_changed'
+  | 'location_changed'
+  | 'map_home_opened'
+  | 'estimate_method_opened'
+  | 'get_app_clicked'
+  | 'store_clicked'
 
 declare global {
   interface Window {
