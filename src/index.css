@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * Design tokens. Brand hues come from eshyft.com (coral #EF4651, sky #3399FF, teal #15BAA2),
+ * placed on a dark "night shift" canvas so the brand colors read as light sources.
+ */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Inter Variable", ui-sans-serif, sans-serif;
+
+  --color-ink: #0b1220;
+  --color-ink-2: #111a2e;
+  --color-ink-3: #1a2540;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-mute: #93a0b8;
+
+  --color-coral: #ef4651;
+  --color-coral-soft: #ff7a83;
+  /* "-strong" shades pass WCAG AA (4.5:1+) with white text; the raw brand hues don't. */
+  --color-coral-strong: #d92f3c;
+  --color-sky: #3399ff;
+  --color-sky-strong: #1a6fd6;
+  --color-sky-soft: #7cc0ff;
+  --color-teal: #15baa2;
+  --color-teal-soft: #5fe3cf;
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-blob: blob 18s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(6%, -8%) scale(1.08); }
+    66% { transform: translate(-5%, 6%) scale(0.95); }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-ink font-sans text-slate-200 antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-display text-white;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-sky-soft;
+  }
+  ::selection {
+    @apply bg-coral/40 text-white;
+  }
+}
+
+/* Declared as a utility (not a component class) so other classes can @apply it in Tailwind v4. */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-[transform,background-color,box-shadow,color] duration-200 active:scale-[0.98];
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs font-medium tracking-wide text-mute uppercase;
+  }
+  .card {
+    @apply rounded-3xl border border-line bg-white/[0.03];
+  }
+  .btn-primary {
+    @apply btn bg-coral-strong text-white shadow-[0_8px_30px_-8px_var(--color-coral)] hover:bg-coral-strong/85;
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-white/[0.04] text-white hover:bg-white/[0.08];
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-ink-2 px-4 py-3 text-sm text-white placeholder:text-mute/70 focus:border-sky focus:outline-hidden;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, var(--color-coral-soft), var(--color-sky-soft) 55%, var(--color-teal-soft));
+  }
+}
+
+/* Range inputs for the calculators. --fill is set inline from the current value. */
+input[type="range"] {
+  @apply h-2 w-full cursor-pointer appearance-none rounded-full bg-ink-3;
+  background-image: linear-gradient(90deg, var(--color-sky), var(--color-teal));
+  background-size: var(--fill, 50%) 100%;
+  background-repeat: no-repeat;
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply size-5 appearance-none rounded-full border-4 border-white bg-ink shadow-lg;
+}
+input[type="range"]::-moz-range-thumb {
+  @apply size-4 rounded-full border-4 border-white bg-ink shadow-lg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
