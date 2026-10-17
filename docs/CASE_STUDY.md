@@ -101,7 +101,7 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 | **Map** | Nearby listings with prices | Nearby nursing homes with distance pins; tap for a per-shift estimate | Answers "is there work near me?" (§7) |
 | **Support banner** | "Curious about hosting? Let's talk" | "New to per diem? Get answers from ESHYFT's support team, 24/7." | First-time per diem nurses have the most questions. This uses the page's real 24/7 support claim. |
 | **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
-| **Testimonials** | Co-host cards | Four real quotes from the current page, with license and state, under the verified App Store rating | Peer proof; a nurse looks for someone like them. |
+| **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. Avatars are illustrations, not photos, so no stranger's face is attached to a real nurse's name; real photos (with consent) drop into `public/nurses/`. |
 | **Backed by ESHYFT** | AirCover checklist | Instant Pay (Stripe), 24/7 support, Joint Commission certification, 30 states | Removes the fear of the unknown, with no claim the current site doesn't already make. |
 | **App showcase** | Phones on gray cards | "Find shifts near you" + "Cash out when you want" | Shows the product. The Instant Pay screen reuses ESHYFT's real marketing numbers ($2,346.77 balance, $450 cash-out) and its blue "Cash out" button. |
 | **Coverage** | — | The 30 states, sorted, in columns | Keeps the useful part of the old location list and drops the 30 identical links. |
@@ -295,6 +295,8 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 | Nursing home locations, beds, star ratings, counts | CMS Nursing Home Provider Information, processed 2026-09-01 |
 | 4.7★ from 3,991 ratings | iTunes Search API, "ESHYFT - Per Diem Nursing", 2026-10-16 |
 | Testimonial quotes and names | eshyft.com/nurses (verbatim) |
+| Shifts worked per nurse (56, 361, 239, 744) | Supplied by ESHYFT |
+| Nurse profile pictures | Illustrations, DiceBear "Notionists" by Zoish (CC0), not photos of the nurses |
 | 30 states | eshyft.com/nurses "Our Locations" |
 | Instant Pay (Stripe), next-day/same-day, weekly pay | eshyft.com/nurses and /eshyft-instant-pay |
 | 24/7 support | eshyft.com/nurses "Why join ESHYFT?" |

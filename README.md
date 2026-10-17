@@ -5,6 +5,12 @@ A concept redesign of **[eshyft.com/nurses](https://eshyft.com/nurses/)**, the p
 **Live demo:** https://josephfanpm.github.io/eshyft-landing-redesign/
 **Full write-up:** [docs/CASE_STUDY.md](docs/CASE_STUDY.md) explains why every part of the design was chosen.
 
+## Walkthrough (46 s)
+
+[![Walkthrough: dragging the shifts slider, opening "how we estimate earnings", switching to Pittsburgh with 12-hour shifts, opening a nursing home on the map, scrolling the page and opening the Get the app QR code](docs/demo/demo.gif)](docs/demo/demo.mp4)
+
+*Click the animation for the full-quality MP4.* The walkthrough covers the earnings slider, the estimate breakdown, changing city and shift length, a nursing-home card on the map, every section of the page, and the "Get the app" QR code.
+
 ![Hero: "You could make $8,950 on ESHYFT", a shifts slider, a location pill and a map of 134 nursing homes around Philadelphia](docs/screenshots/hero-philadelphia.png)
 
 ---
