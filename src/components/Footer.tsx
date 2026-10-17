@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { links } from '../data/content'
-import { meta } from '../lib/estimate'
 
 export function Footer() {
   return (
@@ -25,10 +24,6 @@ export function Footer() {
         </div>
         <div className="space-y-2 border-t border-hairline py-6 text-sm text-ink-2">
           <p>Concept redesign of eshyft.com/nurses by Joseph Fan. Not an official ESHYFT page.</p>
-          <p>
-            Wages: {meta.wages.source}, {meta.wages.reference}. Nursing homes: {meta.nursingHomes.source} (
-            {meta.nursingHomes.processingDate}); not all are ESHYFT partners. Map data © OpenStreetMap contributors.
-          </p>
         </div>
       </div>
     </footer>

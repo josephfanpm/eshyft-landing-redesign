@@ -48,9 +48,6 @@ export function Testimonials() {
           </figure>
         ))}
       </div>
-      <p className="mt-6 text-center text-xs text-ink-2">
-        Representative photos ({testimonials.map((t) => t.photoBy).join(', ')} on Unsplash). Quotes are from ESHYFT nurses.
-      </p>
     </section>
   )
 }
