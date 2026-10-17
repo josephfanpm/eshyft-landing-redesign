@@ -34,7 +34,8 @@ On mobile, Lighthouse performance went from **39 to 97** and largest contentful 
 11. [Performance](#11-performance)
 12. [How I'd measure it](#12-how-id-measure-it)
 13. [Limitations and next steps](#13-limitations-and-next-steps)
-14. [Where every number comes from](#14-where-every-number-comes-from)
+14. [What it would cost on Google Maps Platform](#14-what-it-would-cost-on-google-maps-platform)
+15. [Where every number comes from](#15-where-every-number-comes-from)
 
 ---
 
@@ -101,7 +102,7 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 | **Map** | Nearby listings with prices | Nearby nursing homes with distance pins; tap for a per-shift estimate | Answers "is there work near me?" (§7) |
 | **Support banner** | "Curious about hosting? Let's talk" | "New to per diem? Get answers from ESHYFT's support team, 24/7." | First-time per diem nurses have the most questions. This uses the page's real 24/7 support claim. |
 | **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
-| **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. Avatars are illustrations, not photos, so no stranger's face is attached to a real nurse's name; real photos (with consent) drop into `public/nurses/`. |
+| **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. Profile pictures are representative stock photos (Unsplash, free license), labelled as such under the cards, since the quotes come from real, named nurses; real photos (with consent) drop into `public/nurses/`. |
 | **Backed by ESHYFT** | AirCover checklist | Instant Pay (Stripe), 24/7 support, Joint Commission certification, 30 states | Removes the fear of the unknown, with no claim the current site doesn't already make. |
 | **App showcase** | Phones on gray cards | "Find shifts near you" + "Cash out when you want" | Shows the product. The Instant Pay screen reuses ESHYFT's real marketing numbers ($2,346.77 balance, $450 cash-out) and its blue "Cash out" button. |
 | **Coverage** | — | The 30 states, sorted, in columns | Keeps the useful part of the old location list and drops the 30 identical links. |
@@ -287,7 +288,72 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 ---
 
-## 14. Where every number comes from
+## 14. What it would cost on Google Maps Platform
+
+ESHYFT already runs on Google Maps Platform:
+- **Flutter nurse app:** `google_maps_flutter` for the shifts map, plus Places Autocomplete, Place Details and Geocoding when nurses enter an address.
+- **Older Angular nurse app:** the Maps JavaScript API and Static Maps.
+- **Admin and facility tools:** the server-side `@googlemaps/google-maps-services-js` client.
+
+So the production version of this page would most likely use Google too, not the Esri tiles in this demo. This section estimates what that would cost.
+
+> **Assumptions.** I didn't have ESHYFT's traffic or billing data (the analytics connectors weren't available), so visitor and usage volumes below are **assumed**, not measured. Prices are Google's official list prices (pay-as-you-go, USD, [pricing page](https://developers.google.com/maps/billing-and-pricing/pricing) updated 2026-10-15). Free monthly caps and volume tiers apply per SKU across the whole billing account, so ESHYFT's other usage would share them.
+
+### Relevant list prices
+
+| SKU | Free per month | Price per 1,000 after that (first tier) | Used by |
+|---|---|---|---|
+| Maps SDK (native Android/iOS maps) | Unlimited | $0 | Flutter nurse app shifts map |
+| Dynamic Maps (Maps JavaScript API load) | 10,000 | $7.00 (then $5.60 above 100k, $4.20 above 500k) | Web maps, including this page |
+| Static Maps | 10,000 | $2.00 (then $1.60 / $1.20) | Map images |
+| Map Tiles API, 2D tiles | 100,000 tiles | $0.60 (then $0.48 / $0.36) | Raw tiles in a third-party map library like Leaflet |
+| Autocomplete Requests | 10,000 | $2.83 | Address search, per request |
+| Autocomplete Session Usage | Unlimited | $0 | Autocomplete when a session token ends in Place Details |
+| Place Details Essentials / **Pro** | 10,000 / 5,000 | $5.00 / **$17.00** | Looking up a chosen address |
+| Geocoding | 10,000 | $5.00 | Address to coordinates |
+
+### This landing page's map
+
+Each visit to the page loads the map once. Panning and zooming within that load aren't billed again.
+
+| Assumed visits / month | Dynamic Maps (JS map, every visit) | Map Tiles API in Leaflet (~30 tiles / visit) | Static map + interactive on tap (25% tap) |
+|---|---|---|---|
+| 25,000 | ~$105 | ~$390 | ~$30 |
+| **50,000** (planning case) | **~$280** | ~$790 | **~$100** |
+| 150,000 | ~$925 | ~$2,230 | ~$460 |
+| 500,000 | ~$2,880 | ~$4,320 | ~$1,610 |
+
+**Recommendation:**
+- Use the **Maps JavaScript API (Dynamic Maps)**, not raw tiles. It's billed per map load rather than per tile, so it's 2–3× cheaper for this page.
+- To cut cost further, show a **Static Maps image** on first paint and load the interactive map only when the visitor taps or scrolls to it. At an assumed 25% interaction rate, that cuts the planning-case cost from ~$280 to ~$100 a month. It also helps mobile performance, which the case study already optimizes for.
+- The city picker and the nursing-home pins come from this project's own dataset (BLS + CMS), so they add **$0** in Places or Geocoding calls.
+
+### ESHYFT's nurse app today
+
+A quick look at the Flutter app's Places code shows two cost drivers worth fixing:
+
+1. **No autocomplete session tokens.** The app calls `places:autocomplete` without a `sessionToken`, so every keystroke request is billed as an Autocomplete Request ($2.83 / 1,000). With a session token that ends in Place Details, those requests fall under the free Session Usage SKU.
+2. **Place Details is likely billed as Pro.** The field mask requests `displayName`, which (as far as I recall Google's Places field tiers; the pricing page doesn't list fields) is a Pro-tier field. That makes each lookup $17 / 1,000 instead of $5 for Essentials. If the address and coordinates are enough, dropping `displayName` (and `viewport`, if unused) would move these calls to Essentials.
+
+Assuming ~3,500 address searches a month (new sign-ups plus address edits), with ~8 keystroke requests per search:
+
+| | Assumed 3,500 searches / mo | Assumed 12,000 searches / mo |
+|---|---|---|
+| Autocomplete Requests (no session token) | ~$50 | ~$245 |
+| Place Details Pro | $0 (under the 5k free cap) | ~$120 |
+| Geocoding | $0 | ~$10 |
+| **Total** | **~$50 / mo** | **~$375 / mo** |
+| With session tokens + Essentials fields | **$0** | **~$20** |
+
+The native shifts map itself costs nothing, because the Maps SDK for Android and iOS has unlimited free usage. The legacy web nurse app's Maps JavaScript and Static Maps usage would bill at the Dynamic Maps and Static Maps rates above.
+
+**What I'd do with real data:**
+- Pull last month's numbers from the Google Cloud billing report, filtered to Maps Platform SKUs, and replace every assumption here.
+- Set budget alerts, and cap each API key's daily quota so a runaway client can't run up costs.
+
+---
+
+## 15. Where every number comes from
 
 | On the page | Source |
 |---|---|
@@ -296,7 +362,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 | 4.7★ from 3,991 ratings | iTunes Search API, "ESHYFT - Per Diem Nursing", 2026-10-16 |
 | Testimonial quotes and names | eshyft.com/nurses (verbatim) |
 | Shifts worked per nurse (56, 361, 239, 744) | Supplied by ESHYFT |
-| Nurse profile pictures | Illustrations, DiceBear "Notionists" by Zoish (CC0), not photos of the nurses |
+| Nurse profile pictures | Representative stock photos from Unsplash (Unsplash License): Ocho Artex Media, Beatriz Mendez, Peter Kalonji, Eros Reyes Cabrera; not photos of the nurses quoted |
 | 30 states | eshyft.com/nurses "Our Locations" |
 | Instant Pay (Stripe), next-day/same-day, weekly pay | eshyft.com/nurses and /eshyft-instant-pay |
 | 24/7 support | eshyft.com/nurses "Why join ESHYFT?" |
@@ -312,6 +378,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 - Deloitte & Google, "Milliseconds Make Millions": https://web.dev/case-studies/milliseconds-make-millions
 - BLS OEWS: https://www.bls.gov/oes/
 - CMS Nursing Home Provider Information: https://data.cms.gov/provider-data/dataset/4pq5-n9py
+- Google Maps Platform pricing (updated 2026-10-15): https://developers.google.com/maps/billing-and-pricing/pricing
 
 ---
 

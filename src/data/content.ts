@@ -27,14 +27,14 @@ export const STATES = [
 
 /**
  * Verbatim quotes from eshyft.com/nurses. Shift counts supplied by ESHYFT.
- * Avatars are illustrations (DiceBear "Notionists", CC0), not photos of these nurses;
- * swap in real photos (with consent) by replacing the files in public/nurses/.
+ * Profile photos are representative stock photos from Unsplash (Unsplash License),
+ * not the nurses quoted; swap in real photos (with consent) via public/nurses/.
  */
 export const testimonials = [
-  { name: 'Zainab A.', role: 'LPN', state: 'Pennsylvania', shifts: 56, avatar: 'nurses/zainab-a.svg', quote: "I love working for ESHYFT. If I have any issues they're always dealt with immediately." },
-  { name: 'Kyrra B.', role: 'CNA', state: 'Pennsylvania', shifts: 361, avatar: 'nurses/kyrra-b.svg', quote: 'Love that you can make your own schedule.' },
-  { name: 'Rebecca D.', role: 'CNA', state: 'Rhode Island', shifts: 239, avatar: 'nurses/rebecca-d.svg', quote: "Over 8 months in, and it's the best decision ever." },
-  { name: 'Jacintha P.', role: 'RN', state: 'Michigan', shifts: 744, avatar: 'nurses/jacintha-p.svg', quote: 'Best agency yet!' },
+  { name: 'Zainab A.', role: 'LPN', state: 'Pennsylvania', shifts: 56, avatar: 'nurses/zainab-a.jpg', photoBy: 'Ocho Artex Media', quote: "I love working for ESHYFT. If I have any issues they're always dealt with immediately." },
+  { name: 'Kyrra B.', role: 'CNA', state: 'Pennsylvania', shifts: 361, avatar: 'nurses/kyrra-b.jpg', photoBy: 'Beatriz Mendez', quote: 'Love that you can make your own schedule.' },
+  { name: 'Rebecca D.', role: 'CNA', state: 'Rhode Island', shifts: 239, avatar: 'nurses/rebecca-d.jpg', photoBy: 'Peter Kalonji', quote: "Over 8 months in, and it's the best decision ever." },
+  { name: 'Jacintha P.', role: 'RN', state: 'Michigan', shifts: 744, avatar: 'nurses/jacintha-p.jpg', photoBy: 'Eros Reyes Cabrera', quote: 'Best agency yet!' },
 ]
 
 export type FaqGroup = { title: string; items: { q: string; a: string }[] }

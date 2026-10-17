@@ -24,7 +24,7 @@ export function Testimonials() {
               width={112}
               height={112}
               loading="lazy"
-              className="size-28 rounded-full"
+              className="size-28 rounded-full object-cover"
             />
             <figcaption className="mt-4">
               <span className="block text-2xl font-bold tracking-tight">{t.name}</span>
@@ -48,6 +48,9 @@ export function Testimonials() {
           </figure>
         ))}
       </div>
+      <p className="mt-6 text-center text-xs text-ink-2">
+        Representative photos ({testimonials.map((t) => t.photoBy).join(', ')} on Unsplash). Quotes are from ESHYFT nurses.
+      </p>
     </section>
   )
 }
