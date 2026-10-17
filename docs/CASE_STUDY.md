@@ -104,7 +104,7 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 | **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
 | **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. Profile pictures are representative stock photos (Unsplash, free license), not the nurses quoted; real photos (with consent) drop into `public/nurses/`. |
 | **Backed by ESHYFT** | AirCover checklist | Instant Pay (Stripe), 24/7 support, Joint Commission certification, 30 states | Removes the fear of the unknown, with no claim the current site doesn't already make. |
-| **App showcase** | Phones on gray cards | "Find shifts near you" + "Cash out when you want" | Shows the product. The Instant Pay screen reuses ESHYFT's real marketing numbers ($2,346.77 balance, $450 cash-out) and its blue "Cash out" button. |
+| **App showcase** | Phones on gray cards | "Find shifts near you" + "Track every dollar", using ESHYFT's **real nurse-app designs** (Find Shifts and Earnings) from ESHYFT's Figma file | Shows the actual product, not an illustration of it: pay per shift, distance, license badges, swipe to book, and pending vs approved earnings. Served as ~80 KB WebP each and lazy-loaded. |
 | **Coverage** | — | The 30 states, sorted, in columns | Keeps the useful part of the old location list and drops the 30 identical links. |
 | **FAQ** | "Your questions, answered" | Grouped accordions (getting started / pay / support) + "Contact support" | Native `<details>` elements, so they're accessible and need no JavaScript. Every answer is drawn from the current site. |
 
@@ -368,7 +368,7 @@ The native shifts map itself costs nothing, because the Maps SDK for Android and
 | 24/7 support | eshyft.com/nurses "Why join ESHYFT?" |
 | Joint Commission certification | eshyft.com footer |
 | App store links | ESHYFT's own Branch links from eshyft.com/nurses |
-| Phone mockup content (shift names, balances) | Illustrative; balance figures mirror eshyft.com's Instant Pay artwork |
+| App screens (Find Shifts, Earnings) | ESHYFT's nurse-app designs in Figma ("Nurse mobile app • 1099"); facility names and pay in them are design placeholders |
 
 **Sources**
 - Airbnb host page: https://www.airbnb.com/host/homes
