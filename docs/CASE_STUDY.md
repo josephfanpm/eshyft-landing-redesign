@@ -54,9 +54,9 @@ On mobile, Lighthouse performance went from **39 to 97** and largest contentful 
 
 ## 2. Why Airbnb's host page
 
-Two-sided marketplaces have a "hard side": the supply that's harder to acquire and keep (Andrew Chen, *The Cold Start Problem*). For Airbnb that's hosts; for ESHYFT it's nurses. Airbnb's host page is the most refined page anyone has built for winning that side.
+Two-sided marketplaces have a "hard side": the supply that's harder to acquire and keep. As Andrew Chen puts it in *The Cold Start Problem* (2021), "For marketplaces, the hard side is usually the 'supply' side of the network." For Airbnb that's hosts; for ESHYFT it's nurses. Airbnb's host page is the most refined page anyone has built for winning that side.
 
-- **The number is the pitch.** Lenny Rachitsky, who led supply growth at Airbnb, writes that earnings estimates were **"an order of magnitude more effective than any other value prop"**, and that growth dipped whenever they were hidden ([source](https://andrewchen.com/grow-marketplace-supply/)).
+- **The number is the pitch.** Lenny Rachitsky, who led supply growth at Airbnb, writes: **"At Airbnb, the earnings estimate was an order of magnitude more effective than any other value prop. Any time we hid or obscured it, growth dipped."** ([*Twenty Eight Ways to Grow Supply in a Marketplace*](https://andrewchen.com/grow-marketplace-supply/), 2019)
 - **It's personal and interactive.** The visitor moves a slider and picks their city, so the number becomes *theirs*. A static "earn up to $X" claim reads as marketing.
 - **It's honest by design.** "Learn how we estimate earnings" sits right under the number, showing the method upfront rather than in fine print. That builds trust (NN/g's "upfront disclosure"), and the method stays visible right where the claim is made.
 - **It's calm.** One accent color, big type, lots of white space, and no motion for motion's sake. Every section is one idea.
@@ -72,22 +72,22 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 | # | Finding | Why it matters |
 |---|---|---|
 | 1 | **The value prop is generic.** "Work when you want. Get paid when you're done." could describe any gig app. | Pay is the main reason nurses go per diem. Any competitor could make the same promise, and it gives no specific reason to choose ESHYFT. |
-| 2 | **The pay figure is hidden inside an image.** The only earnings claim is a caption baked into the hero image. | It can't be read by screen readers or search engines, and it can't be personalized. |
+| 2 | **The pay figure is hidden inside an image.** The only earnings claim is a caption baked into the hero image. | It can't be read by screen readers or search engines, and it can't be personalized. WCAG 2.2 asks that "text is used to convey information rather than images of text" (SC 1.4.5). |
 | 3 | **There's no answer to "where?"** 30 state names (unsorted) all link to the same help article. | The second question after "how much?" is "is there work near me?" |
-| 4 | **The header has five competing actions:** For Nurses ▾, For Facilities ▾, Company ▾, Sign In, "Schedule a consultation", "Get started ▾". | On a nurse page, a facility sales CTA is noise. |
-| 5 | **Proof is missing.** The app's verified **4.7★ from 3,991 App Store ratings** never appears. | Third-party proof beats self-claims (NN/g, Trustworthy Design). |
-| 6 | **It's slow.** Lighthouse mobile: performance 39, LCP 24.8 s, 4.4 MB, 156 requests. | Deloitte/Google tie a 0.1 s mobile speed gain to measurable conversion lifts. |
-| 7 | **There are contrast failures.** White on brand blue (#3399FF) is 2.94:1, and coral (#EF4651) on white is 3.7:1. | Both fail WCAG AA. Nurses often read their phones outdoors or in bright hallways. |
+| 4 | **The header has five competing actions:** For Nurses ▾, For Facilities ▾, Company ▾, Sign In, "Schedule a consultation", "Get started ▾". | On a nurse page, a facility sales CTA is noise. Hick's law: "The time it takes to make a decision increases with the number and complexity of choices." |
+| 5 | **Proof is missing.** The app's verified **4.7★ from 3,991 App Store ratings** never appears. | Third-party proof beats self-claims. NN/g counts "connection to the rest of the web" among its four trust factors, because "Linking to these outside sources shows you are transparent and confident about your service" (Harley, *Trustworthy Design*, 2016). |
+| 6 | **It's slow.** Lighthouse mobile: performance 39, LCP 24.8 s, 4.4 MB, 156 requests. | Deloitte and Google found that "A 0.1 second improvement of mobile site speed increases conversion rates by 8.4% for retail sites and 10.1% for travel sites" (*Milliseconds Make Millions*, 2020). Google's own data: "53% of mobile site visitors leave a page that takes longer than three seconds to load." |
+| 7 | **There are contrast failures.** White on brand blue (#3399FF) is 2.94:1, and coral (#EF4651) on white is 3.7:1. | Both fail WCAG AA, which requires "a contrast ratio of at least 4.5:1" for body text (SC 1.4.3). Nurses often read their phones outdoors or in bright hallways. |
 
 ---
 
 ## 4. Design principles
 
-1. **One number, made personal.** Everything above the fold serves the estimate.
-2. **Show the method next to the claim.** No asterisks.
+1. **One number, made personal.** Everything above the fold serves the estimate, because that's where attention is: in Nielsen Norman Group's research, "users spent about 57% of their page-viewing time above the fold" (Fessenden, *Scrolling and Attention*, 2018).
+2. **Show the method next to the claim.** No asterisks. NN/g's trust research found that "people appreciate when sites are upfront with all information that relates to the customer experience" (Harley, *Trustworthy Design*, 2016). The "Learn how we estimate earnings" link is what Don Norman calls a signifier: "signifiers are signs, perceptible signals of what can be done" (*The Design of Everyday Things*, revised edition, 2013).
 3. **Use real data or nothing.** Every figure is sourced, and estimates say they're estimates.
-4. **Restraint over decoration.** I avoided the tells of a generic template: dark gradients, glowing blobs, gradient text, eyebrow pills, marquees and scroll-triggered fades. Motion only appears where it explains something (the map flying to a new city, a pin highlighting).
-5. **One primary action.** "Get the app," everywhere.
+4. **Restraint over decoration.** Dieter Rams's tenth principle: "Good design is as little design as possible. Less, but better – because it concentrates on the essential aspects, and the products are not burdened with non-essentials." I avoided the tells of a generic template: dark gradients, glowing blobs, gradient text, eyebrow pills, marquees and scroll-triggered fades. Motion only appears where it explains something (the map flying to a new city, a pin highlighting).
+5. **One primary action.** "Get the app," everywhere. Designing for the phone first forces the choice; as Luke Wroblewski puts it, "If you design mobile first, you create agreement on what matters most."
 
 ---
 
@@ -102,7 +102,7 @@ ESHYFT already gestures at this idea. The current hero image contains a small ca
 | **Map** | Nearby listings with prices | Nearby nursing homes with distance pins; tap for a per-shift estimate | Answers "is there work near me?" (§7) |
 | **Support banner** | "Curious about hosting? Let's talk" | "New to per diem? Get answers from ESHYFT's support team, 24/7." | First-time per diem nurses have the most questions. This uses the page's real 24/7 support claim. |
 | **Three reasons** | Easy / Worth it / Protected | Flexible / Pays fast / Supported | Distilled from the four blocks on the current page (support, quick & easy, in control, instant pay). |
-| **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. Profile pictures are representative stock photos (Unsplash, free license), not the nurses quoted; real photos (with consent) drop into `public/nurses/`. |
+| **Testimonials** | Co-host cards (photo, name, stat box) | Four real quotes from the current page. Each card has a profile picture, license and state, and a stat box with the nurse's **shifts worked on ESHYFT** (56, 361, 239, 744), under the verified App Store rating | Peer proof; a nurse looks for someone like them, and a shift count shows these are experienced, repeat users. This is Robert Cialdini's social proof: "Especially when they are uncertain, people will look to the actions and behaviors of others to determine their own." Profile pictures are representative stock photos (Unsplash, free license), not the nurses quoted; real photos (with consent) drop into `public/nurses/`. |
 | **Backed by ESHYFT** | AirCover checklist | Instant Pay (Stripe), 24/7 support, Joint Commission certification, 30 states | Removes the fear of the unknown, with no claim the current site doesn't already make. |
 | **App showcase** | Phones on gray cards | "Find shifts near you" + "Track every dollar", using ESHYFT's **real nurse-app designs** (Find Shifts and Earnings) from ESHYFT's Figma file | Shows the actual product, not an illustration of it: pay per shift, distance, license badges, swipe to book, and pending vs approved earnings. Served as ~80 KB WebP each and lazy-loaded. |
 | **Coverage** | — | The 30 states, sorted, in columns | Keeps the useful part of the old location list and drops the 30 identical links. |
@@ -202,7 +202,7 @@ Two follow-up fixes:
 
 ## 9. Visual system
 
-The design system copies Airbnb's choices; nothing visual is lifted from Airbnb itself.
+The design system copies Airbnb's choices; nothing visual is lifted from Airbnb itself. It borrows the goal Airbnb set for its own Design Language System: "Our designs should be unified platforms that drive greater efficiency through well-defined and reusable components" (Karri Saarinen, *Building a Visual Language*, Airbnb Design, 2016). Here that means a handful of tokens, used everywhere.
 
 | Token | Value | Use |
 |---|---|---|
@@ -229,7 +229,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 - **The location picker:** a labelled dialog with a listbox of cities; Escape or a click outside closes it.
 - **Map pins** are keyboard-focusable with descriptive titles. The decorative "you" marker is hidden from assistive tech.
 - **The FAQ** uses `<details>`/`<summary>`.
-- **Motion:** `prefers-reduced-motion` disables the map fly-to and transitions.
+- **Motion:** `prefers-reduced-motion` disables the map fly-to and transitions, in the spirit of WCAG 2.2's "Motion animation triggered by interaction can be disabled" (SC 2.3.3).
 - Lighthouse accessibility: **100** on mobile and desktop.
 
 ---
@@ -272,7 +272,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 **First experiments:**
 1. **Estimate vs. no estimate.** Replicate Airbnb's finding for nurses: the current hero against this hero.
-2. **Default shifts:** 4 vs 8 vs 12. Higher numbers attract; lower numbers feel attainable.
+2. **Default shifts:** 4 vs 8 vs 12. Higher numbers attract; lower numbers feel attainable. The default is an anchor in Tversky and Kahneman's sense, "adjustment from an anchor, which is usually employed in numerical prediction when a relevant value is available" (*Science*, 1974), so it shapes what a nurse expects to earn, not just what they see first.
 3. **Wage source:** BLS median + 15% vs ESHYFT's median posted rate. Does a higher, ESHYFT-specific number lift installs without hurting retention, i.e. do expectations match reality?
 4. **Map:** distance pins vs no labels. Does "134 nursing homes near you" drive the click, or the number alone?
 
@@ -370,12 +370,32 @@ The native shifts map itself costs nothing, because the Maps SDK for Android and
 | App store links | ESHYFT's own Branch links from eshyft.com/nurses |
 | App screens (Find Shifts, Earnings) | ESHYFT's nurse-app designs in Figma ("Nurse mobile app • 1099"); facility names and pay in them are design placeholders |
 
-**Sources**
+**Design and research sources**
+
+Every quotation above was checked word for word against the source linked here.
+
+*Books and research*
+- Don Norman, *The Design of Everyday Things*, revised and expanded edition (Basic Books, 2013). Quoted from the author's preface: https://jnd.org/preface-design-of-everyday-things-revised-edition/
+- Andrew Chen, *The Cold Start Problem* (Harper Business, 2021): https://andrewchen.com/solve-a-hard-problem-cold-start-problem/
+- Amos Tversky and Daniel Kahneman, "Judgment under Uncertainty: Heuristics and Biases," *Science* 185 (1974): 1124–1131. https://doi.org/10.1126/science.185.4157.1124
+- Robert Cialdini, the principle of social proof, from *Influence* (quoted from Influence at Work): https://www.influenceatwork.com/7-principles-of-persuasion/
+- Dieter Rams, ten principles for good design (Vitsœ): https://www.vitsoe.com/us/about/good-design
+
+*Usability and design practice*
+- Aurora Harley, "Trustworthy Design," Nielsen Norman Group, 2016: https://www.nngroup.com/articles/trustworthy-design/
+- Therese Fessenden, "Scrolling and Attention," Nielsen Norman Group, 2018: https://www.nngroup.com/articles/scrolling-and-attention/
+- Karri Saarinen, "Building a Visual Language," Airbnb Design, 2016 (archived): https://web.archive.org/web/20231226211828/https://airbnb.design/building-a-visual-language/
+- Luke Wroblewski, "Mobile First Helps with Big Issues," 2010: https://www.lukew.com/ff/entry.asp?1117
+- Jon Yablonski, "Hick's Law," Laws of UX: https://lawsofux.com/hicks-law/
+- W3C, Web Content Accessibility Guidelines (WCAG) 2.2, SC 1.4.3, 1.4.5 and 2.3.3: https://www.w3.org/TR/WCAG22/
+
+*Marketplaces and performance*
 - Airbnb host page: https://www.airbnb.com/host/homes
-- Lenny Rachitsky, "28 ways to grow supply in a marketplace": https://andrewchen.com/grow-marketplace-supply/
-- Andrew Chen, *The Cold Start Problem*: https://andrewchen.com/solve-a-hard-problem-cold-start-problem/
-- Nielsen Norman Group, Trustworthy Design: https://www.nngroup.com/articles/trustworthy-design/
-- Deloitte & Google, "Milliseconds Make Millions": https://web.dev/case-studies/milliseconds-make-millions
+- Lenny Rachitsky, "Twenty Eight Ways to Grow Supply in a Marketplace," guest essay on andrewchen.com, 2019: https://andrewchen.com/grow-marketplace-supply/
+- Deloitte and Google, "Milliseconds Make Millions," 2020: https://web.dev/case-studies/milliseconds-make-millions
+- Daniel An, "Find out how you stack up to new industry benchmarks for mobile page speed," Think with Google, 2017 (Google Data, March 2016): https://www.thinkwithgoogle.com/_qs/documents/57/mobile-page-speed-new-industry-benchmarks.pdf
+
+**Data sources**
 - BLS OEWS: https://www.bls.gov/oes/
 - CMS Nursing Home Provider Information: https://data.cms.gov/provider-data/dataset/4pq5-n9py
 - Google Maps Platform pricing (updated 2026-10-15): https://developers.google.com/maps/billing-and-pricing/pricing
