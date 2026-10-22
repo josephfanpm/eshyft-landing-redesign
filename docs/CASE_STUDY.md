@@ -29,13 +29,12 @@ On mobile, Lighthouse performance went from **39 to 97** and largest contentful 
 6. [The earnings estimate](#6-the-earnings-estimate)
 7. [The map](#7-the-map)
 8. [The dataset](#8-the-dataset)
-9. [Visual system](#9-visual-system)
-10. [Accessibility](#10-accessibility)
-11. [Performance](#11-performance)
-12. [How I'd measure it](#12-how-id-measure-it)
-13. [Limitations and next steps](#13-limitations-and-next-steps)
-14. [What it would cost on Google Maps Platform](#14-what-it-would-cost-on-google-maps-platform)
-15. [Where every number comes from](#15-where-every-number-comes-from)
+9. [Accessibility](#9-accessibility)
+10. [Performance](#10-performance)
+11. [How I'd measure it](#11-how-id-measure-it)
+12. [Limitations and next steps](#12-limitations-and-next-steps)
+13. [What it would cost on Google Maps Platform](#13-what-it-would-cost-on-google-maps-platform)
+14. [Where every number comes from](#14-where-every-number-comes-from)
 
 ---
 
@@ -200,28 +199,7 @@ Two follow-up fixes:
 
 ---
 
-## 9. Visual system
-
-The design system copies Airbnb's choices; nothing visual is lifted from Airbnb itself. It borrows the goal Airbnb set for its own Design Language System: "Our designs should be unified platforms that drive greater efficiency through well-defined and reusable components" (Karri Saarinen, *Building a Visual Language*, Airbnb Design, 2016). Here that means a handful of tokens, used everywhere.
-
-| Token | Value | Use |
-|---|---|---|
-| Ink | `#222222` | All primary text (Airbnb's exact text color) |
-| Secondary | `#6A6A6A` | Supporting copy (5.41:1 on white) |
-| Hairline | `#DDDDDD` | Borders and dividers |
-| Mist | `#F7F7F7` | Alternating sections, icon tiles, cards |
-| Coral | `#EF4651` | ESHYFT's logo color, used for the slider fill, home marker and search icon |
-| Coral ink | `#D42A37` → `#C8233A` gradient | The one brand button; white text passes AA (4.53–5.59:1) |
-
-- **Logo:** ESHYFT's horizontal logo (supplied PNG, 388×80, rendered at 32 px tall so it stays sharp on 2x screens). The "e" mark, cropped from the same file, is the favicon.
-- **Map:** Esri World Topo, a colored basemap (blue water, green parks, soft land tones) chosen as the closest free match to the pastel Google map on Airbnb's page.
-- **Type:** DM Sans, a free geometric sans close in feel to Airbnb Cereal.
-- **Weights and sizes:** headlines are bold with −3.5% tracking at 40–72 px; body is 16–20 px.
-- **Shape:** fully rounded buttons and pills, 16–24 px card radius, and soft shadows only on floating elements (map, popovers, dialogs).
-
----
-
-## 10. Accessibility
+## 9. Accessibility
 
 - **Contrast:** every text/background pair meets WCAG AA (verified with a script). This includes the brand button, which needed a darker coral than the logo.
 - **The slider** is a native `<input type="range">` with `aria-valuetext="20 shifts a month"`.
@@ -234,7 +212,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 ---
 
-## 11. Performance
+## 10. Performance
 
 | | Live eshyft.com/nurses (mobile) | Redesign (mobile) | Redesign (desktop) |
 |---|---|---|---|
@@ -258,7 +236,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 ---
 
-## 12. How I'd measure it
+## 11. How I'd measure it
 
 **Events** (in `src/lib/analytics.ts`, GTM-compatible):
 - `estimate_changed`
@@ -278,7 +256,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 ---
 
-## 13. Limitations and next steps
+## 12. Limitations and next steps
 
 - **Real ESHYFT rates and real open shifts.** The biggest upgrade: pins that are actual shifts with actual rates, as Airbnb's are actual listings.
 - **Geolocation default** instead of Philadelphia.
@@ -288,7 +266,7 @@ The design system copies Airbnb's choices; nothing visual is lifted from Airbnb 
 
 ---
 
-## 14. What it would cost on Google Maps Platform
+## 13. What it would cost on Google Maps Platform
 
 ESHYFT already runs on Google Maps Platform:
 - **Flutter nurse app:** `google_maps_flutter` for the shifts map, plus Places Autocomplete, Place Details and Geocoding when nurses enter an address.
@@ -353,7 +331,7 @@ The native shifts map itself costs nothing, because the Maps SDK for Android and
 
 ---
 
-## 15. Where every number comes from
+## 14. Where every number comes from
 
 | On the page | Source |
 |---|---|
@@ -384,7 +362,6 @@ Every quotation above was checked word for word against the source linked here.
 *Usability and design practice*
 - Aurora Harley, "Trustworthy Design," Nielsen Norman Group, 2016: https://www.nngroup.com/articles/trustworthy-design/
 - Therese Fessenden, "Scrolling and Attention," Nielsen Norman Group, 2018: https://www.nngroup.com/articles/scrolling-and-attention/
-- Karri Saarinen, "Building a Visual Language," Airbnb Design, 2016 (archived): https://web.archive.org/web/20231226211828/https://airbnb.design/building-a-visual-language/
 - Luke Wroblewski, "Mobile First Helps with Big Issues," 2010: https://www.lukew.com/ff/entry.asp?1117
 - Jon Yablonski, "Hick's Law," Laws of UX: https://lawsofux.com/hicks-law/
 - W3C, Web Content Accessibility Guidelines (WCAG) 2.2, SC 1.4.3, 1.4.5 and 2.3.3: https://www.w3.org/TR/WCAG22/

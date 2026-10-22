@@ -3,7 +3,7 @@
 A concept redesign of **[eshyft.com/nurses](https://eshyft.com/nurses/)**, the page that recruits CNAs, LPNs and RNs to ESHYFT's per diem staffing marketplace. It follows the playbook of **[Airbnb's host landing page](https://www.airbnb.com/host/homes)**. The page leads with a personalized, interactive earnings estimate ("You could make $X on ESHYFT") on top of a live map of nursing homes near you. The estimate is built on a real dataset of public wage and facility data. Philadelphia is the default city.
 
 **Live demo:** https://josephfanpm.github.io/eshyft-landing-redesign/
-**Full write-up:** [docs/CASE_STUDY.md](docs/CASE_STUDY.md) explains why every part of the design was chosen, citing Don Norman, Dieter Rams, Nielsen Norman Group, WCAG 2.2, Tversky and Kahneman, and Airbnb's own design team, with every quotation checked against its source ([§15](docs/CASE_STUDY.md#15-where-every-number-comes-from)).
+**Full write-up:** [docs/CASE_STUDY.md](docs/CASE_STUDY.md) explains why every part of the design was chosen, citing Don Norman, Dieter Rams, Nielsen Norman Group, WCAG 2.2 and Tversky and Kahneman, with every quotation checked against its source ([§14](docs/CASE_STUDY.md#14-where-every-number-comes-from)).
 
 ## Walkthrough (46 s)
 
