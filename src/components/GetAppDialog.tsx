@@ -14,7 +14,7 @@ export function GetAppDialog({ open, onClose }: { open: boolean; onClose: () => 
     <Dialog open={open} onClose={onClose} title="Get the ESHYFT app">
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
         <div className="shrink-0 rounded-xl border border-hairline p-3">
-          <QRCodeSVG value={links.appIos} size={148} level="M" fgColor="#222222" />
+          <QRCodeSVG value={links.appIos} size={148} level="M" fgColor="#1f2937" />
         </div>
         <div>
           <p className="text-xl font-bold tracking-tight">Scan with your phone’s camera</p>

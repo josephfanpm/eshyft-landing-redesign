@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
 /*
- * Tokens follow the Airbnb host page's system: near-black text, one gray for
- * secondary copy, hairline borders, a light gray for alternating sections, and a
- * single brand accent. Here the accent is ESHYFT's logo coral.
+ * Tokens follow the Airbnb host page's system (near-black text, one gray for
+ * secondary copy, hairline borders, a light gray for alternating sections, one
+ * brand accent), with ESHYFT's primitive colors (Foundations / Color variables):
+ * Grey 800 titles, 700 body text, 400 light grey, 200 bg 2, 300 bg; Red 500 red
+ * salsa (the logo), 600 error, 700; Blue 400 dodge blue, 600 azure; Green 600
+ * success text.
  */
 @theme {
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --color-ink: #222222;
-  --color-ink-2: #6a6a6a;
-  --color-hairline: #dddddd;
-  --color-mist: #f7f7f7;
-  --color-sand: #f2efe9;
+  --color-ink: #1f2937; /* Grey 800, primary gunmetal (titles) */
+  --color-ink-2: #4b5563; /* Grey 700, secondary charcoal (body text) */
+  --color-hairline: #d1d5db; /* Grey 400, light grey */
+  --color-mist: #f9fafb; /* Grey 200, bg 2 */
+  --color-sand: #f3f4f6; /* Grey 300, bg */
 
-  /* Coral is the logo color. "coral-ink" is the darker shade used wherever white
-     text sits on it, because white on #EF4651 fails WCAG AA (3.7:1). */
-  --color-coral: #ef4651;
-  --color-coral-ink: #d42a37;
-  --color-blue: #3399ff;
-  --color-blue-ink: #1a6fd6;
-  --color-success: #008a05;
+  /* Coral is the logo color (Red 500). Red text on white uses "coral-ink" (Red 700),
+     because #EF4651 on white is 3.7:1, under WCAG AA for body-size text. */
+  --color-coral: #ef4651; /* Red 500, red salsa */
+  --color-coral-hover: #f42c38; /* Red 600 */
+  --color-coral-ink: #991b1b; /* Red 700 */
+  --color-blue: #3399ff; /* Blue 400, dodge blue */
+  --color-blue-ink: #207be5; /* Blue 600, azure */
+  --color-success: #065f46; /* Green 600, success text */
 }
 
 @layer base {
@@ -54,9 +58,9 @@
 
 @utility btn-brand {
   @apply btn text-white;
-  background: linear-gradient(90deg, #dc3542 0%, #c8233a 100%);
+  background: var(--color-coral);
   &:hover {
-    background: #c8233a;
+    background: var(--color-coral-hover);
   }
 }
 

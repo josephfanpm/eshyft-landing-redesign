@@ -48,18 +48,18 @@ function pickPillHomes(data: Home[], mpp: number) {
 }
 
 function stars(n: number | null) {
-  if (!n) return '<span style="color:#6a6a6a">Not rated</span>'
-  return `${'★'.repeat(n)}<span style="color:#dddddd">${'★'.repeat(5 - n)}</span>`
+  if (!n) return '<span style="color:#4b5563">Not rated</span>'
+  return `${'★'.repeat(n)}<span style="color:#d1d5db">${'★'.repeat(5 - n)}</span>`
 }
 
 function popupHtml(home: Home, role: Role, hours: ShiftLength, hourly: number) {
   const [, , mi, beds, rating] = home
   return `
     <p style="font-weight:700;font-size:15px;margin:0">Nursing home · ${mi} mi away</p>
-    <p style="color:#6a6a6a;font-size:13px;margin:4px 0 0">${beds ?? '—'} certified beds</p>
+    <p style="color:#4b5563;font-size:13px;margin:4px 0 0">${beds ?? '—'} certified beds</p>
     <p style="font-size:13px;margin:2px 0 0">CMS rating <span aria-label="${rating ?? 'no'} of 5 stars">${stars(rating)}</span></p>
-    <hr style="border:0;border-top:1px solid #dddddd;margin:12px 0" />
-    <p style="color:#6a6a6a;font-size:13px;margin:0">One ${hours}-hour ${role} shift</p>
+    <hr style="border:0;border-top:1px solid #d1d5db;margin:12px 0" />
+    <p style="color:#4b5563;font-size:13px;margin:0">One ${hours}-hour ${role} shift</p>
     <p style="font-weight:700;font-size:20px;margin:2px 0 0">≈ ${formatUsd(hourly * hours)}</p>`
 }
 
@@ -141,7 +141,7 @@ export default function NursingHomeMap({ city, role, hours }: { city: City; role
         group.clearLayers()
 
         data.forEach((h, i) => {
-          L.circleMarker([h[0], h[1]], { radius: 4.5, color: '#ffffff', weight: 1.5, fillColor: '#222222', fillOpacity: 1 })
+          L.circleMarker([h[0], h[1]], { radius: 4.5, color: '#ffffff', weight: 1.5, fillColor: '#1f2937', fillOpacity: 1 })
             .on('click', (e) => openHome(i, e.latlng))
             .addTo(group)
         })
