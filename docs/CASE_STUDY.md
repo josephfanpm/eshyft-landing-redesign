@@ -2,6 +2,8 @@
 
 **Author:** Joseph Fan · **October 2026** · Independent concept, not an official ESHYFT page
 
+*Short version: the [README](../README.md). Requirements and acceptance criteria: [PRD.md](PRD.md).*
+
 ---
 
 ## TL;DR
